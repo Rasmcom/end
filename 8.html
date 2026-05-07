@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>استمارة متابعة إنهاء المناهج الدراسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══ RESET & OVERFLOW PREVENTION ══ */
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  max-width: 100%;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #8a95a8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 12px 8px;
+  min-height: 100vh;
+  overflow-x: hidden; 
+}
+
+/* ══ RESPONSIVE A4 CONTAINER ══ */
+.a4 {
+  width: 100%;
+  max-width: 210mm; 
+  min-height: 297mm; 
+  height: auto;
+  position: relative; 
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+  background: #fff; 
+  flex-shrink: 0;
+  margin: 0 auto;
+}
+
+/* ══ HEADER & FOOTER BACKGROUNDS ══ */
+.head-bg {
+  position: absolute; 
+  top: 0; left: 0; right: 0; 
+  height: 120px;
+  background: url('background1.jpg') center top / cover no-repeat;
+  z-index: 0;
+}
+.foot-bg {
+  position: absolute; 
+  bottom: 0; left: 0; right: 0; 
+  height: 90px;
+  background: url('background2.jpg') center bottom / cover no-repeat;
+  z-index: 0;
+}
+
+.a4-body {
+  position: relative; z-index: 2;
+  padding: 10mm 12mm 10mm 12mm;
+  height: 100%;
+  display: flex; flex-direction: column;
+}
+
+/* ══ TOP META (HARDCODED) ══ */
+.top-meta { text-align: center; margin-bottom: 2px; }
+.meta-txt {
+  font-family: 'Cairo', sans-serif;
+  font-size: 10pt; font-weight: 800; color: #0a2440;
+  text-shadow: 0 0 6px rgba(255,255,255,0.9);
+  display: block; margin: 0 auto 1px auto;
+}
+.meta-txt.lg { font-size: 11.5pt; font-weight: 900; }
+
+/* ══ TITLE ══ */
+.title-block { text-align: center; margin: 4px 0 2px; }
+.title-main {
+  font-family: 'Cairo', sans-serif;
+  font-size: 16pt; font-weight: 900; color: #0a2440;
+  display: block; line-height: 1.2;
+}
+.title-sub {
+  font-family: 'Cairo', sans-serif;
+  font-size: 9.5pt; font-weight: 700; color: #145a32;
+  display: block; margin-top: 1px;
+}
+
+/* ══ DIVIDER ══ */
+.divider {
+  height: 2px; border-radius: 2px; margin: 3px 0;
+  background: linear-gradient(to left, transparent, #145a32 25%, #c8971a 50%, #145a32 75%, transparent);
+  flex-shrink: 0;
+}
+
+/* ══ GREETING ══ */
+.greeting {
+  font-family: 'Cairo', sans-serif;
+  font-size: 7.2pt; font-weight: 600; line-height: 1.45; color: #3a2800;
+  background: rgba(255,252,232,0.88); border-right: 3px solid #c8971a;
+  padding: 4px 8px; border-radius: 0 4px 4px 0;
+  margin-bottom: 4px; flex-shrink: 0;
+}
+
+/* ══ SECTION HEADER ══ */
+.sec {
+  grid-column: 1/-1;
+  font-family: 'Cairo', sans-serif;
+  font-size: 7.8pt; font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, #0a2440 0%, #1a4a7a 100%);
+  padding: 3px 9px; border-radius: 4px;
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 2px;
+}
+.sec::before {
+  content: ''; width: 2.5px; height: 11px;
+  background: #f0c84a; border-radius: 2px; flex-shrink: 0;
+}
+
+/* ══ MAIN GRID ══ */
+.fgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 3px 10px; 
+  flex: 1; min-height: 0;
+  align-content: start;
+}
+.full { grid-column: 1/-1; }
+
+/* ══ FIELD ══ */
+.field { display: flex; flex-direction: column; gap: 1px; width: 100%; }
+.field > .lbl {
+  font-family: 'Cairo', sans-serif;
+  font-size: 7pt; font-weight: 800; color: #1a2a40;
+}
+.req { color: #dc2626; }
+
+/* ══ INPUTS ══ */
+.fi {
+  font-family: 'Cairo', sans-serif;
+  font-size: 7.5pt; font-weight: 600; color: #0a1a30;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid #b8c4ce; border-radius: 4px;
+  padding: 3px 6px; width: 100%; min-height: 22px; direction: rtl;
+}
+.fi:focus { outline: none; border-color: #145a32; background: #fff; }
+textarea.fi { resize: none; height: 28px; }
+
+/* ══ OPTION PILLS ══ */
+.opts { display: flex; flex-wrap: wrap; gap: 3px; width: 100%; }
+.opt {
+  display: flex; align-items: center; gap: 3px; flex-grow: 1; justify-content: center;
+  font-family: 'Cairo', sans-serif; font-size: 7pt; font-weight: 700;
+  background: rgba(255,255,255,0.82); border: 1px solid #ccc; border-radius: 4px;
+  padding: 2px 6px; cursor: pointer; user-select: none; white-space: nowrap;
+}
+.opt input { display: none; }
+.dot {
+  width: 11px; height: 11px;
+  border: 1.5px solid #aaa; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.opt.cb .dot { border-radius: 3px; }
+.opt input:checked ~ .dot { background: #145a32; border-color: #145a32; }
+.opt input:checked ~ .dot::after { content:'✓'; color:#fff; font-size:6.5px; font-weight:900; }
+.opt:has(input:checked) { border-color:#145a32; background:rgba(226,247,234,0.92); color:#145a32; }
+
+/* ══ PROGRESS TILES ══ */
+.prog-row { display: flex; gap: 3px; width: 100%; flex-wrap: wrap; }
+.ptile {
+  flex: 1 1 20%; cursor: pointer; user-select: none;
+  background: rgba(255,255,255,0.82); border: 1px solid #ccc; border-radius: 4px;
+  padding: 4px 4px; min-width: 60px;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.ptile input { display:none; }
+.pnum {
+  font-family:'Cairo',sans-serif;
+  font-size:8.5pt; font-weight:900; color:#888;
+}
+.plbl { 
+  font-family:'Cairo',sans-serif; font-size:8pt; color:#666; font-weight:700;
+}
+.ptile:has(input:checked) { border-color:#145a32; background:rgba(226,247,234,0.92); }
+.ptile:has(input:checked) .pnum, .ptile:has(input:checked) .plbl { color:#145a32; }
+
+/* ══ YES/NO ══ */
+.yn { display:flex; gap:4px; width: 100%; }
+.yn .opt { flex:1; justify-content:center; }
+
+/* ══ DECLARATION + SIGNATURE ══ */
+.decl-sig {
+  grid-column: 1/-1;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; align-items: stretch;
+}
+.decl-col {
+  font-family:'Cairo',sans-serif;
+  font-size:7pt; font-weight:600; line-height:1.6; color:#14532d;
+  background:rgba(240,253,244,0.92);
+  border:1.5px solid #86efac; border-radius:5px;
+  padding:6px 8px;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.decl-date {
+  font-family:'Cairo',sans-serif;
+  font-size:7pt; font-weight:800; color:#0a2440;
+  margin-top:4px; padding-top:3px; border-top:1px dashed #86efac;
+}
+.sig-col { display:flex; flex-direction:column; gap:2px; }
+.sig-col-lbl {
+  font-family:'Cairo',sans-serif;
+  font-size:7pt; font-weight:800; color:#1a2a40; text-align:center;
+}
+.sig-box {
+  flex:1; height:65px; width: 100%; 
+  background:rgba(255,255,255,0.9);
+  border:2px solid #b8c4ce; border-radius:5px;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.sig-tabs-row {
+  display:flex; border-bottom:1px solid #e0e6eb;
+  background:rgba(248,250,252,0.9);
+}
+.stab {
+  flex:1; padding:3px 0; text-align:center;
+  font-family:'Cairo',sans-serif; font-size:6.5pt; font-weight:700;
+  border:none; background:transparent; cursor:pointer; color:#666;
+}
+.stab.on { background:#145a32; color:#fff; }
+#sigCanvas {
+  width: 100%; height: 50px; 
+  background: #fff; cursor: crosshair; touch-action: none; display: block;
+}
+#sigText {
+  font-family:'Cairo',sans-serif; font-size:13px; font-weight:700;
+  text-align:center; border:none; outline:none; display:none;
+  padding:6px; width:100%; background:#fff; direction:rtl; flex:1; height: 50px;
+}
+.sig-clr-row {
+  padding:2px 5px; border-top:1px solid #e8edf2;
+  background:rgba(248,250,252,0.9);
+}
+.sig-clr {
+  font-family:'Cairo',sans-serif; font-size:6.5pt; font-weight:800;
+  color:#dc2626; background:#fee2e2; border:none; border-radius:3px;
+  padding:1.5px 6px; cursor:pointer;
+}
+
+/* ══ BOTTOM FOOTER ══ */
+.btm-footer {
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-top:auto; padding-top:6px;
+  flex-shrink:0; width: 100%; z-index: 2; position: relative;
+}
+.ftperson { display:flex; flex-direction:column; gap:2px; }
+.ft-title {
+  font-family:'Cairo',sans-serif;
+  font-size:10pt; font-weight:900; color:#0a2440; /* كحلي للأسماء والصفات */
+  text-shadow: 0 0 6px rgba(255,255,255,0.9);
+  direction:rtl; text-align:center;
+}
+
+/* ══ BUTTONS ══ */
+.actions {
+  display:flex; justify-content:center; gap:10px; flex-wrap: wrap;
+  margin-top:15px; flex-shrink:0; width: 100%;
+}
+.btn {
+  font-family:'Cairo',sans-serif; font-size:13px; font-weight:800;
+  padding:10px 24px; border-radius:8px; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content: center; gap:6px; transition:transform .15s;
+}
+.btn:hover { transform:translateY(-1px); }
+.btn-g { background:linear-gradient(135deg,#145a32,#1e8449); color:#fff; box-shadow:0 4px 14px rgba(20,90,50,.3); }
+.btn-d { background:linear-gradient(135deg,#c8971a,#e6a820); color:#fff; box-shadow:0 4px 14px rgba(200,151,26,.3); }
+.btn-r { background:#fee2e2; color:#dc2626; }
+
+/* =========================================
+   📱 RESPONSIVE MEDIA QUERIES (Mobile View)
+   ========================================= */
+@media screen and (max-width: 768px) {
+  body { padding: 10px 5px; }
+  /* إخفاء الصور على الجوال ووضع خطوط علوية وسفلية أنيقة */
+  .head-bg, .foot-bg { display: none !important; }
+  .a4 { 
+    border-top: 8px solid #0a2440; 
+    border-bottom: 8px solid #145a32; 
+  }
+  .a4-body { padding: 5mm !important; }
+  
+  .fgrid { grid-template-columns: 1fr; gap: 5px; }
+  .decl-sig { grid-template-columns: 1fr; gap: 8px; }
+  .title-main { font-size: 15pt; }
+  .prog-row .ptile { flex: 1 1 45%; }
+  .btm-footer { flex-direction: column; align-items: center !important; gap: 10px; margin-top: 15px; }
+  .ft-title { text-shadow: none; }
+}
+
+/* =========================================
+   🖨️ STRICT PRINT SETTINGS (A4 EXACT ONE PAGE)
+   ========================================= */
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  html, body { 
+    width: 210mm; height: 297mm; 
+    background: white !important; 
+    padding: 0 !important; margin: 0 !important; 
+    overflow: hidden !important; /* إجبار على صفحة واحدة */
+  }
+  
+  .a4 { 
+    width: 210mm !important; 
+    height: 297mm !important; 
+    max-width: none !important; 
+    box-shadow: none !important; 
+    margin: 0 !important;
+    border: none !important;
+    overflow: hidden !important; 
+    page-break-after: avoid; page-break-inside: avoid;
+  }
+  
+  /* الحفاظ على صور الهيدر والفوتر خلف النص في الطباعة */
+  .head-bg, .foot-bg {
+    display: block !important;
+    -webkit-print-color-adjust: exact !important; 
+    print-color-adjust: exact !important;
+  }
+
+  .a4-body { 
+    padding: 8mm 12mm 8mm 12mm !important; 
+    height: 100% !important;
+  }
+  
+  .fgrid { 
+    grid-template-columns: 1fr 1fr !important; 
+    gap: 3px 10px !important; 
+    align-content: start !important;
+  }
+  
+  .field { gap: 1px !important; margin: 0 !important; }
+  
+  .sec { 
+    font-size: 8pt !important; 
+    padding: 2px 8px !important; 
+    margin-top: 4px !important; 
+    margin-bottom: 2px !important;
+    height: 22px !important; 
+  }
+  
+  .lbl { font-size: 7.5pt !important; margin: 0 !important; }
+  .fi { 
+    font-size: 8pt !important; 
+    min-height: 22px !important; 
+    height: 22px !important; 
+    padding: 0 6px !important; 
+  }
+  textarea.fi { min-height: 26px !important; height: 26px !important; padding: 3px 6px !important;}
+  
+  .opts, .yn { gap: 3px !important; margin: 0 !important;}
+  .opt { 
+    padding: 0 4px !important; 
+    min-height: 22px !important; 
+    height: 22px !important; 
+    font-size: 7.5pt !important; 
+  }
+  
+  .prog-row { gap: 3px !important; }
+  .ptile { 
+    padding: 0 4px !important; 
+    min-height: 22px !important; 
+    height: 22px !important; 
+  }
+  .pnum, .plbl { font-size: 8pt !important; display: inline !important; }
+
+  .title-block { margin: 2px 0 !important; }
+  .title-main { font-size: 15pt !important; line-height: 1.2 !important;}
+  
+  .greeting { 
+    font-size: 7.5pt !important; 
+    margin-top: 2px !important;
+    margin-bottom: 2px !important; 
+    padding: 3px 6px !important; 
+  }
+  
+  /* مربع التوقيع */
+  .decl-sig { grid-template-columns: 1fr 1fr !important; gap: 8px !important; margin-top: 4px !important; }
+  .sig-box { 
+    min-height: 50px !important; 
+    height: 50px !important; 
+    border: none !important;            
+    background: transparent !important; 
+  }
+  .sig-tabs-row, .sig-clr-row, .sig-clr { display: none !important; }
+  #sigCanvas { display: block !important; height: 50px !important; background: transparent !important; }
+  #sigText { display: none !important; }
+
+  .btm-footer { 
+    flex-direction: row !important; 
+    align-items: flex-end !important; 
+  }
+  
+  .actions { display: none !important; }
+  
+  /* الألوان الإجبارية للطباعة */
+  .sec, .opt:has(input:checked), .ptile:has(input:checked), .decl-col, .divider {
+    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="a4">
+  <!-- الخلفيات الثابتة -->
+  <div class="head-bg"></div>
+  <div class="foot-bg"></div>
+  
+  <div class="a4-body">
+
+    <!-- TOP META -->
+    <div class="top-meta">
+      <span class="meta-txt lg">الإدارة العامة للتعليم بمنطقة المدينة المنورة</span>
+      <span class="meta-txt">متوسطة الحسن البصري</span>
+    </div>
+
+    <!-- TITLE -->
+    <div class="title-block">
+      <span class="title-main">استمارة متابعة إنهاء المناهج الدراسية</span>
+      <span class="title-sub">الفصل الدراسي الثاني لعام ١٤٤٧هـ</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <strong>عزيزي المعلم.. السلام عليكم ورحمة الله وبركاته،،</strong>&nbsp;
+      انطلاقًا من الحرص على متابعة سير العملية التعليمية وضمان إنهاء المقررات الدراسية وفق الخطة الزمنية المعتمدة، يرجى التكرم بتعبئة هذه الاستمارة بدقة لتوثيق إنجازاتك والاستعداد لفترة الاختبارات النهائية. <strong>شاكرين لك جهودك العظيمة في بناء جيل المستقبل.</strong>
+    </div>
+
+    <!-- FORM GRID -->
+    <div class="fgrid">
+
+      <div class="sec full">أولاً: البيانات الشخصية</div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>اسم المعلم الثلاثي</span>
+        <input type="text" class="fi" placeholder="الاسم الثلاثي كاملاً">
+      </div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>المادة التي تدرسها</span>
+        <input type="text" class="fi" placeholder="اسم المادة الدراسية">
+      </div>
+
+      <div class="sec full">ثانياً: بيانات الصف والفصل</div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>المرحلة والصف</span>
+        <div class="opts">
+          <!-- خيارات الصف للمتوسطة فقط -->
+          <label class="opt cb"><input type="checkbox" name="grade" value="الأول متوسط"><span class="dot"></span>الأول متوسط</label>
+          <label class="opt cb"><input type="checkbox" name="grade" value="الثاني متوسط"><span class="dot"></span>الثاني متوسط</label>
+          <label class="opt cb"><input type="checkbox" name="grade" value="الثالث متوسط"><span class="dot"></span>الثالث متوسط</label>
+        </div>
+      </div>
+      
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>الفصل / الشعبة (اكتب الفصول بدقة)</span>
+        <input type="text" class="fi" placeholder="مثال: أ، ب، 1، 2، 3...">
+      </div>
+
+      <div class="sec full">ثالثاً: حالة إنهاء المنهج والإنجاز</div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>حالة الإنتهاء من المنهج</span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="st"><span class="dot"></span>تم الانتهاء كاملاً</label>
+          <label class="opt"><input type="radio" name="st"><span class="dot"></span>جاري إنهاء المتبقي</label>
+          <label class="opt"><input type="radio" name="st" id="lateR"><span class="dot"></span>متأخر عن الخطة</label>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl">تاريخ الإنتهاء من المنهج</span>
+        <input type="date" class="fi">
+      </div>
+      <div class="field full" id="lateF" style="display:none">
+        <span class="lbl">أسباب التأخر عن الخطة الزمنية</span>
+        <textarea class="fi" placeholder="اكتب أسباب التأخر هنا..."></textarea>
+      </div>
+      <div class="field full">
+        <span class="lbl"><span class="req">* </span>نسبة الإنجاز الفعلية للمنهج</span>
+        <div class="prog-row">
+          <label class="ptile"><input type="radio" name="pg"><span class="pnum">١٠٠٪</span> <span class="plbl">- مكتمل</span></label>
+          <label class="ptile"><input type="radio" name="pg"><span class="pnum">٩٠٪</span> <span class="plbl">- متقدم جداً</span></label>
+          <label class="ptile"><input type="radio" name="pg"><span class="pnum">٨٠٪</span> <span class="plbl">- متقدم</span></label>
+          <label class="ptile"><input type="radio" name="pg"><span class="pnum">أقل ٨٠٪</span> <span class="plbl">- يحتاج متابعة</span></label>
+        </div>
+      </div>
+
+      <div class="sec full">رابعاً: المتابعة والتقييم</div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>رصد درجات الاختبارات الفترية؟</span>
+        <div class="yn">
+          <label class="opt"><input type="radio" name="q1"><span class="dot"></span>نعم</label>
+          <label class="opt"><input type="radio" name="q1"><span class="dot"></span>لا</label>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>تقييم المهام الأدائية والمشاريع؟</span>
+        <div class="yn">
+          <label class="opt"><input type="radio" name="q2"><span class="dot"></span>نعم</label>
+          <label class="opt"><input type="radio" name="q2"><span class="dot"></span>لا</label>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>تسليم سجلات المتابعة للإدارة؟</span>
+        <div class="yn">
+          <label class="opt"><input type="radio" name="q3"><span class="dot"></span>نعم</label>
+          <label class="opt"><input type="radio" name="q3"><span class="dot"></span>لا</label>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl"><span class="req">* </span>تنفيذ خطة المراجعة النهائية؟</span>
+        <div class="yn">
+          <label class="opt"><input type="radio" name="q4"><span class="dot"></span>نعم</label>
+          <label class="opt"><input type="radio" name="q4"><span class="dot"></span>لا</label>
+        </div>
+      </div>
+
+      <div class="sec full">خامساً: ملاحظات</div>
+      <div class="field">
+        <span class="lbl">رابط إثبات الإنجاز (اختياري)</span>
+        <input type="url" class="fi" placeholder="https://...">
+      </div>
+      <div class="field">
+        <span class="lbl">ملاحظات إضافية / صعوبات:</span>
+        <textarea class="fi" placeholder="اكتب هنا..."></textarea>
+      </div>
+
+      <div class="sec full">سادساً: الإقرار والتوقيع الإلكتروني</div>
+      <div class="decl-sig full">
+        <div class="decl-col">
+          أقر أنا المعلم المذكور أعلاه بصحة كافة البيانات المسجلة بخصوص إنهاء المناهج الدراسية المسندة إليّ، مع مراجعة المهارات الأساسية للطلاب ورصد الدرجات، وهذا إقرار مني بذلك.
+          <div class="decl-date" id="declDate">التاريخ: ...</div>
+        </div>
+        <div class="sig-col">
+          <span class="sig-col-lbl">توقيع المعلم</span>
+          <div class="sig-box">
+            <div class="sig-tabs-row">
+              <button class="stab on" onclick="swSig('draw')">✍️ رسم التوقيع</button>
+              <button class="stab" onclick="swSig('type')">⌨️ كتابة الاسم</button>
+            </div>
+            <canvas id="sigCanvas" width="400" height="70"></canvas>
+            <input type="text" id="sigText" class="fi" placeholder="اكتب اسمك الرباعي كاملاً">
+            <div class="sig-clr-row">
+              <button class="sig-clr" onclick="clrSig()">🗑️ مسح</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fgrid -->
+
+    <!-- BOTTOM FOOTER -->
+    <div class="btm-footer">
+      <div class="ftperson">
+        <span class="ft-title">وكيل المدرسة / عبدالغفور العمري</span>
+      </div>
+      <div class="ftperson">
+        <span class="ft-title">مدير المدرسة / سلطان السحيمي</span>
+      </div>
+    </div>
+
+  </div><!-- /a4-body -->
+</div><!-- /a4 -->
+
+<div class="actions">
+  <button class="btn btn-g" onclick="doPrint()">🖨️ طباعة A4</button>
+  <button class="btn btn-d" onclick="doPrint()">📄 تصدير PDF</button>
+  <button class="btn btn-r" onclick="resetAll()">🔄 مسح البيانات</button>
+</div>
+
+<script>
+// ── Auto Hijri date ──
+function getHijri(){
+  try {
+    const d = new Date();
+    const p = new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{day:'numeric',month:'numeric',year:'numeric'}).formatToParts(d);
+    const m = {}; p.forEach(x => m[x.type] = x.value);
+    return `${m.day} / ${m.month} / ${m.year} هـ`;
+  } catch(e) { 
+    return new Date().toLocaleDateString('ar-SA'); 
+  }
+}
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('declDate').textContent = 'التاريخ: ' + getHijri();
+});
+
+// ── Signature ──
+const cv = document.getElementById('sigCanvas');
+const cx = cv.getContext('2d');
+let drw = false, lx = 0, ly = 0;
+
+function gp(e){
+  const r = cv.getBoundingClientRect();
+  const sx = cv.width / r.width;
+  const sy = cv.height / r.height;
+  if(e.touches) return { x: (e.touches[0].clientX - r.left) * sx, y: (e.touches[0].clientY - r.top) * sy };
+  return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy };
+}
+
+cv.addEventListener('mousedown', e => { drw = true; const p = gp(e); lx = p.x; ly = p.y; });
+cv.addEventListener('mousemove', e => {
+  if(!drw) return; 
+  const p = gp(e);
+  cx.beginPath(); cx.moveTo(lx, ly); cx.lineTo(p.x, p.y);
+  cx.strokeStyle = '#0a2440'; cx.lineWidth = 2.5; cx.lineCap = 'round'; cx.lineJoin = 'round'; cx.stroke();
+  lx = p.x; ly = p.y;
+});
+cv.addEventListener('mouseup', () => drw = false);
+cv.addEventListener('mouseleave', () => drw = false);
+cv.addEventListener('touchstart', e => { e.preventDefault(); drw = true; const p = gp(e); lx = p.x; ly = p.y; }, {passive: false});
+cv.addEventListener('touchmove', e => {
+  e.preventDefault(); 
+  if(!drw) return; 
+  const p = gp(e);
+  cx.beginPath(); cx.moveTo(lx, ly); cx.lineTo(p.x, p.y);
+  cx.strokeStyle = '#0a2440'; cx.lineWidth = 2.5; cx.lineCap = 'round'; cx.lineJoin = 'round'; cx.stroke();
+  lx = p.x; ly = p.y;
+}, {passive: false});
+cv.addEventListener('touchend', () => drw = false);
+
+function clrSig(){ cx.clearRect(0, 0, cv.width, cv.height); document.getElementById('sigText').value = ''; }
+function swSig(t){
+  document.querySelectorAll('.stab').forEach(b => b.classList.remove('on'));
+  if(t === 'draw'){
+    cv.style.display = 'block'; 
+    document.getElementById('sigText').style.display = 'none';
+    document.querySelectorAll('.stab')[0].classList.add('on');
+  } else {
+    cv.style.display = 'none'; 
+    document.getElementById('sigText').style.display = 'block';
+    document.querySelectorAll('.stab')[1].classList.add('on');
+  }
+}
+
+// ── Late reason toggle ──
+document.querySelectorAll('input[name="st"]').forEach((r, i) => {
+  r.addEventListener('change', () => {
+    document.getElementById('lateF').style.display = (i === 2 && r.checked) ? 'flex' : 'none';
+  });
+});
+
+// ── Print Preparation & Restore ──
+window.addEventListener('beforeprint', () => {
+  const txt = document.getElementById('sigText');
+  if(txt.style.display !== 'none' && txt.value.trim()){
+    cv.style.display = 'block';
+    cx.clearRect(0, 0, cv.width, cv.height);
+    cx.font = 'bold 20px Cairo, sans-serif';
+    cx.fillStyle = '#0a2440';
+    cx.textAlign = 'center';
+    cx.textBaseline = 'middle';
+    cx.fillText(txt.value, cv.width / 2, cv.height / 2);
+  }
+});
+
+window.addEventListener('afterprint', () => {
+  const txt = document.getElementById('sigText');
+  if(txt.style.display !== 'none'){
+    cv.style.display = 'none';
+    cx.clearRect(0, 0, cv.width, cv.height);
+  }
+});
+
+function doPrint(){ window.print(); }
+
+// ── Reset ──
+function resetAll(){
+  if(!confirm('هل أنت متأكد من مسح بيانات الاستمارة؟')) return;
+  document.querySelectorAll('.fi').forEach(e => { if(e.tagName === 'SELECT') e.selectedIndex = 0; else e.value = ''; });
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(e => e.checked = false);
+  document.getElementById('lateF').style.display = 'none';
+  clrSig();
+}
+</script>
+</body>
+</html>
