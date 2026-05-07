@@ -23,75 +23,112 @@ body {
   min-height: 100vh;
 }
 
-/* ══ STRICT A4 CONTAINER ══ */
+/* ══ STRICT A4 CONTAINER (Screen View) ══ */
 .a4 {
   width: 210mm; 
-  min-height: 297mm; 
+  height: 297mm; 
   position: relative; 
   background: #fff; 
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   margin: 0 auto;
   overflow: hidden; 
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
-/* ══ BACKGROUND IMAGES (SCREEN VIEW) ══ */
-.bg-top {
-  position: absolute; top: 0; left: 0;
-  width: 100%; max-width: 210mm; height: auto; z-index: 0;
-}
-.bg-bot {
-  position: absolute; bottom: 0; left: 0;
-  width: 100%; max-width: 210mm; height: auto; z-index: 0;
-}
-
-/* ══ CONTENT BODY ══ */
-.a4-body {
-  position: relative; z-index: 10; 
-  padding: 30mm 15mm 25mm 15mm; 
-  display: flex; flex-direction: column;
+/* ══ HEADER FIXED LAYER ══ */
+.print-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 38mm;
+  z-index: 2;
+  overflow: hidden;
+  background-image: url("background3.jpg"); /* طلبك في التعديل السابق */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
 }
 
-/* ══ TOP META ══ */
-.top-meta { text-align: center; margin-bottom: 5px; }
-.meta-txt {
-  font-family: 'Cairo', sans-serif; font-size: 11pt; font-weight: 800; color: #0a2440;
-  display: block; margin: 0 auto 1px auto; text-shadow: 0 0 5px rgba(255,255,255,0.9);
+/* ══ CONTENT LAYER (Strictly bounded between header & footer) ══ */
+.print-content {
+  position: absolute;
+  top: 39mm;
+  bottom: 45mm;
+  right: 12mm;
+  left: 12mm;
+  z-index: 3;
+  overflow-y: auto; /* السماح بالتمرير في وضع الشاشة العادية فقط */
+  overflow-x: hidden;
 }
-.meta-txt.lg { font-size: 13pt; font-weight: 900; }
 
-/* ══ TITLE ══ */
-.title-block { text-align: center; margin: 5px 0 3px; }
-.title-main { font-family: 'Cairo', sans-serif; font-size: 16pt; font-weight: 900; color: #0a2440; display: block; line-height: 1.2; }
-.title-sub { font-family: 'Cairo', sans-serif; font-size: 10pt; font-weight: 700; color: #145a32; display: block; margin-top: 2px; }
+/* ══ SIGNATURES LAYER (Fixed above footer) ══ */
+.print-signatures {
+  position: absolute;
+  right: 12mm;
+  left: 12mm;
+  bottom: 27mm;
+  height: 13mm;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-/* ══ DIVIDER ══ */
+.ftperson {
+  width: 45%;
+  text-align: center;
+}
+
+.ft-inp {
+  font-family: 'Cairo', sans-serif;
+  color: #0a2440;
+  font-size: 10.5pt;
+  font-weight: 900;
+  text-shadow: 0 0 5px rgba(255,255,255,0.9);
+}
+
+/* ══ FOOTER FIXED LAYER ══ */
+.print-footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 25mm;
+  z-index: 2;
+  overflow: hidden;
+  background-image: url("background2.jpg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+
+/* ══ FORM ELEMENTS (Screen View Defaults) ══ */
+.title-block { text-align: center; margin: 0 0 5px 0; }
+.title-main { font-size: 16pt; font-weight: 900; color: #0a2440; display: block; line-height: 1.2; }
+.title-sub { font-size: 10pt; font-weight: 700; color: #145a32; display: block; margin-top: 2px; }
 .divider { height: 2px; border-radius: 2px; margin: 4px 0; background: linear-gradient(to left, transparent, #145a32 25%, #c8971a 50%, #145a32 75%, transparent); flex-shrink: 0; }
 
-/* ══ GREETING ══ */
 .greeting {
-  font-family: 'Cairo', sans-serif; font-size: 7.5pt; font-weight: 700; line-height: 1.5; color: #3a2800;
+  font-size: 7.5pt; font-weight: 700; line-height: 1.5; color: #3a2800;
   background: rgba(255,252,232,0.85); border-right: 3px solid #c8971a;
-  padding: 5px 8px; border-radius: 0 4px 4px 0; margin-bottom: 4px; flex-shrink: 0;
+  padding: 5px 8px; border-radius: 0 4px 4px 0; margin-bottom: 4px;
 }
 
-/* ══ SECTION HEADER ══ */
 .sec {
-  grid-column: 1/-1; font-family: 'Cairo', sans-serif; font-size: 8.5pt; font-weight: 800; color: #fff;
+  grid-column: 1/-1; font-size: 8.5pt; font-weight: 800; color: #fff;
   background: linear-gradient(135deg, #0a2440 0%, #1a4a7a 100%);
   padding: 3px 9px; border-radius: 4px; display: flex; align-items: center; gap: 6px; margin-top: 3px; margin-bottom: 1px;
 }
 .sec::before { content: ''; width: 2.5px; height: 11px; background: #f0c84a; border-radius: 2px; flex-shrink: 0; }
 
-/* ══ MAIN GRID ══ */
 .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
 .full { grid-column: 1/-1; }
-
-/* ══ FIELD ══ */
 .field { display: flex; flex-direction: column; gap: 1px; width: 100%; }
-.field > .lbl { font-family: 'Cairo', sans-serif; font-size: 7.5pt; font-weight: 800; color: #1a2a40; }
+.field > .lbl { font-size: 7.5pt; font-weight: 800; color: #1a2a40; }
 .req { color: #dc2626; }
 
-/* ══ INPUTS ══ */
 .fi {
   font-family: 'Cairo', sans-serif; font-size: 8pt; font-weight: 600; color: #0a1a30;
   background: rgba(255,255,255,0.9); border: 1px solid #b8c4ce; border-radius: 4px;
@@ -100,11 +137,10 @@ body {
 .fi:focus { outline: none; border-color: #145a32; background: #fff; }
 textarea.fi { resize: none; height: 30px; }
 
-/* ══ OPTION PILLS ══ */
 .opts { display: flex; flex-wrap: wrap; gap: 3px; width: 100%; }
 .opt {
   display: flex; align-items: center; gap: 3px; flex-grow: 1; justify-content: center;
-  font-family: 'Cairo', sans-serif; font-size: 7.5pt; font-weight: 700;
+  font-size: 7.5pt; font-weight: 700;
   background: rgba(255,255,255,0.82); border: 1px solid #ccc; border-radius: 4px;
   padding: 2px 6px; cursor: pointer; user-select: none; white-space: nowrap; min-height: 22px;
 }
@@ -115,7 +151,6 @@ textarea.fi { resize: none; height: 30px; }
 .opt input:checked ~ .dot::after { content:'✓'; color:#fff; font-size:6.5px; font-weight:900; }
 .opt:has(input:checked) { border-color:#145a32; background:rgba(226,247,234,0.92); color:#145a32; }
 
-/* ══ PROGRESS TILES ══ */
 .prog-row { display: flex; gap: 3px; width: 100%; flex-wrap: wrap; }
 .ptile {
   flex: 1 1 20%; cursor: pointer; user-select: none;
@@ -123,53 +158,41 @@ textarea.fi { resize: none; height: 30px; }
   padding: 2px 4px; min-width: 60px; min-height: 22px; display: flex; align-items: center; justify-content: center; gap: 4px;
 }
 .ptile input { display:none; }
-.pnum { font-family:'Cairo',sans-serif; font-size:8.5pt; font-weight:900; color:#888; }
-.plbl { font-family:'Cairo',sans-serif; font-size:7.5pt; color:#666; font-weight:700; }
+.pnum { font-size:8.5pt; font-weight:900; color:#888; }
+.plbl { font-size:7.5pt; color:#666; font-weight:700; }
 .ptile:has(input:checked) { border-color:#145a32; background:rgba(226,247,234,0.92); }
 .ptile:has(input:checked) .pnum, .ptile:has(input:checked) .plbl { color:#145a32; }
 
-/* ══ YES/NO ══ */
 .yn { display:flex; gap:4px; width: 100%; }
 .yn .opt { flex:1; justify-content:center; }
 
-/* ══ DECLARATION + SIGNATURE ══ */
 .decl-sig { grid-column: 1/-1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: stretch; }
 .decl-col {
-  font-family:'Cairo',sans-serif; font-size:7pt; font-weight:600; line-height:1.6; color:#14532d;
+  font-size:7pt; font-weight:600; line-height:1.6; color:#14532d;
   background:rgba(240,253,244,0.92); border:1.5px solid #86efac; border-radius:5px;
   padding:5px 8px; display:flex; flex-direction:column; justify-content:space-between;
 }
-.decl-date { font-family:'Cairo',sans-serif; font-size:7.5pt; font-weight:800; color:#0a2440; margin-top:4px; padding-top:3px; border-top:1px dashed #86efac; }
+.decl-date { font-size:7.5pt; font-weight:800; color:#0a2440; margin-top:4px; padding-top:3px; border-top:1px dashed #86efac; }
 .sig-col { display:flex; flex-direction:column; gap:2px; }
-.sig-col-lbl { font-family:'Cairo',sans-serif; font-size:8pt; font-weight:800; color:#1a2a40; text-align:center; }
+.sig-col-lbl { font-size:8pt; font-weight:800; color:#1a2a40; text-align:center; }
 
-/* تكبير مربع التوقيع */
 .sig-box {
-  flex:1; height:85px; width: 100%; background:rgba(255,255,255,0.9);
+  flex:1; height:75px; width: 100%; background:rgba(255,255,255,0.9);
   border:2px solid #b8c4ce; border-radius:5px; display:flex; flex-direction:column; overflow:hidden; position: relative;
 }
 .sig-tabs-row { display:flex; border-bottom:1px solid #e0e6eb; background:rgba(248,250,252,0.9); }
-.stab { flex:1; padding:4px 0; text-align:center; font-family:'Cairo',sans-serif; font-size:7pt; font-weight:700; border:none; background:transparent; cursor:pointer; color:#666; }
+.stab { flex:1; padding:3px 0; text-align:center; font-family:'Cairo',sans-serif; font-size:7pt; font-weight:700; border:none; background:transparent; cursor:pointer; color:#666; }
 .stab.on { background:#145a32; color:#fff; }
 
-/* تكبير مساحة الرسم والصورة */
-#sigCanvas { width: 100%; height: 60px; background: #fff; cursor: crosshair; touch-action: none; display: block; }
-#sigImgPrint { width: 100%; height: 60px; object-fit: contain; display: none; background: transparent; }
+#sigCanvas { width: 100%; height: 50px; background: #fff; cursor: crosshair; touch-action: none; display: block; }
+#sigImgPrint { width: 100%; height: 50px; object-fit: contain; display: none; background: transparent; margin: 0 auto; }
 #sigText { font-family:'Cairo',sans-serif; font-size:14px; font-weight:700; text-align:center; border:none; outline:none; display:none; padding:4px; width:100%; background:#fff; direction:rtl; flex:1; }
 
-.sig-clr-row { padding:2px 5px; border-top:1px solid #e8edf2; background:rgba(248,250,252,0.9); }
+.sig-clr-row { padding:1px 5px; border-top:1px solid #e8edf2; background:rgba(248,250,252,0.9); }
 .sig-clr { font-family:'Cairo',sans-serif; font-size:6pt; font-weight:800; color:#dc2626; background:#fee2e2; border:none; border-radius:3px; padding:1px 6px; cursor:pointer; }
 
-/* ══ BOTTOM FOOTER (الأسماء مباشرة تحت الإقرار) ══ */
-.btm-footer {
-  display:flex; justify-content:space-between; align-items:flex-start;
-  margin-top: 15px; padding: 0 10px; flex-shrink:0; width: 100%; position: relative;
-}
-.ftperson { display:flex; flex-direction:column; gap:2px; }
-.ft-title { font-family:'Cairo',sans-serif; font-size:10.5pt; font-weight:900; color:#0a2440; direction:rtl; text-align:center; text-shadow: 0 0 5px rgba(255,255,255,0.9); }
-
 /* ══ BUTTONS ══ */
-.actions { display:flex; justify-content:center; gap:10px; flex-wrap: wrap; margin-top:15px; flex-shrink:0; width: 100%; max-width: 210mm;}
+.actions { display:flex; justify-content:center; gap:10px; flex-wrap: wrap; margin-top:15px; width: 100%; max-width: 210mm;}
 .btn { font-family:'Cairo',sans-serif; font-size:13px; font-weight:800; padding:10px 24px; border-radius:8px; border:none; cursor:pointer; display:flex; align-items:center; justify-content: center; gap:6px; transition:transform .15s; }
 .btn:hover { transform:translateY(-1px); }
 .btn-g { background:linear-gradient(135deg,#145a32,#1e8449); color:#fff; box-shadow:0 4px 14px rgba(20,90,50,.3); }
@@ -177,113 +200,318 @@ textarea.fi { resize: none; height: 30px; }
 .btn-r { background:#fee2e2; color:#dc2626; }
 
 /* =========================================
-   📱 RESPONSIVE MEDIA QUERIES (Mobile View)
+   📱 RESPONSIVE (لتسهيل القراءة في الجوال قبل الطباعة)
    ========================================= */
 @media screen and (max-width: 768px) {
   body { padding: 5px; }
-  .a4 { max-width: 100%; height: auto; border-radius: 6px; }
-  .fgrid { grid-template-columns: 1fr; gap: 5px; }
-  .decl-sig { grid-template-columns: 1fr; gap: 6px; }
-  .btm-footer { flex-direction: row; margin-top: 15px; }
-  .ft-title { font-size: 9.5pt; }
+  .a4 { width: 100%; height: auto; min-height: 100vh; overflow: visible; display: flex; flex-direction: column; }
+  .print-header { position: relative; width: 100%; height: 18vw; }
+  .print-content { position: relative; top: auto; bottom: auto; left: auto; right: auto; padding: 10px; overflow: visible; }
+  .print-signatures { position: relative; bottom: auto; left: auto; right: auto; margin-top: 15px; flex-direction: row; height: auto; }
+  .print-footer { position: relative; width: 100%; height: 12vw; margin-top: 15px; }
+  .fgrid, .decl-sig { grid-template-columns: 1fr; gap: 6px; }
+  .ft-inp { font-size: 9pt; }
 }
 
 /* =========================================
-   🖨️ STRICT PRINT SETTINGS (الحل الجذري للمقاسات)
+   🖨️ STRICT PRINT SETTINGS (قواعد الطباعة الجذريّة)
    ========================================= */
 @media print {
-  @page { 
-    size: A4 portrait; 
-    margin: 0 !important; /* إزالة هوامش الطابعة تماماً */
+  @page {
+    size: A4 portrait;
+    margin: 0;
   }
-  
-  html, body { 
-    width: 210mm !important; 
-    height: 297mm !important; 
-    margin: 0 !important; 
-    padding: 0 !important; 
-    background: #fff !important; 
-    overflow: hidden !important; 
-  }
-  
-  /* الحاوية تصبح مطلقة لمنع المتصفح من العبث بمقاساتها */
-  .a4 { 
-    width: 210mm !important; 
-    height: 297mm !important; 
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    margin: 0 !important; 
+
+  html,
+  body {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
     padding: 0 !important;
-    border: none !important; 
-    box-shadow: none !important;
-    overflow: hidden !important; 
-    page-break-after: avoid !important;
+    overflow: hidden !important;
+    background: #fff !important;
+  }
+
+  * {
+    box-sizing: border-box !important;
+    break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
-  
-  /* تثبيت الهيدر والفوتر كخلفية ثابتة تماماً في أطراف الورقة */
-  .bg-top {
-    position: fixed !important; top: 0 !important; left: 0 !important;
-    width: 210mm !important; display: block !important;
-    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
-  }
-  .bg-bot {
-    position: fixed !important; bottom: 0 !important; left: 0 !important;
-    width: 210mm !important; display: block !important;
-    -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;
+
+  .actions,
+  .brand-banner,
+  .no-print {
+    display: none !important;
   }
 
-  /* هوامش داخلية للنص تمنعه من لمس الصور */
-  .a4-body { padding: 30mm 12mm 20mm 12mm !important; }
-  
-  /* ضغط المسافات لتناسب كل شيء في صفحة واحدة بشكل مريح */
-  .fgrid { gap: 3px 8px !important; }
-  .field { gap: 0 !important; }
-  .sec { font-size: 8pt !important; padding: 1px 6px !important; margin: 2px 0 1px !important; height: 18px !important; }
-  .lbl { font-size: 7pt !important; margin: 0 !important; }
-  .fi { font-size: 7.5pt !important; min-height: 18px !important; height: 18px !important; padding: 0 4px !important; }
-  textarea.fi { min-height: 20px !important; height: 20px !important; padding: 2px 4px !important;}
-  .opts, .yn { gap: 2px !important; margin: 0 !important;}
-  .opt { padding: 0 2px !important; min-height: 18px !important; height: 18px !important; font-size: 7pt !important; }
-  .prog-row { gap: 2px !important; }
-  .ptile { padding: 0 2px !important; min-height: 18px !important; height: 18px !important; }
-  
-  .title-block { margin: 2px 0 !important; }
-  .title-main { font-size: 14pt !important; line-height: 1.1 !important;}
-  .greeting { font-size: 7pt !important; margin: 2px 0 !important; padding: 2px 4px !important; }
-  
-  .decl-sig { gap: 6px !important; margin-top: 4px !important; }
-  .decl-col { padding: 4px 6px !important; font-size: 6.5pt !important; }
-  .sig-box { min-height: 50px !important; height: 50px !important; border: none !important; background: transparent !important; }
-  .sig-tabs-row, .sig-clr-row, .sig-clr { display: none !important; }
-  
-  /* التوقيع يطبع كصورة لمنع الحذف */
-  #sigCanvas { display: none !important; }
-  #sigImgPrint { display: block !important; height: 50px !important; background: transparent !important; }
-  #sigText { display: none !important; }
+  .a4 {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 0 !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+    break-before: avoid !important;
+    break-after: avoid !important;
+  }
 
-  /* الأسماء تظل تحت الإقرار */
-  .btm-footer { margin-top: 8px !important; padding-bottom: 0 !important; }
-  
-  .actions { display: none !important; }
-  
-  * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+  /* الهيدر ثابت أعلى الصفحة */
+  .print-header {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    height: 38mm !important;
+    z-index: 2 !important;
+    overflow: hidden !important;
+    background-image: url("background3.jpg") !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: top center !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* المحتوى بين الهيدر والفوتر */
+  .print-content {
+    position: absolute !important;
+    display: block !important;
+    top: 39mm !important;
+    right: 12mm !important;
+    left: 12mm !important;
+    bottom: 45mm !important;
+    z-index: 3 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* منطقة الأسماء ثابتة فوق الفوتر */
+  .print-signatures {
+    position: absolute !important;
+    right: 12mm !important;
+    left: 12mm !important;
+    bottom: 27mm !important;
+    height: 13mm !important;
+    z-index: 4 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .ftperson {
+    width: 45% !important;
+    text-align: center !important;
+  }
+
+  .ft-inp {
+    color: #0a2440 !important;
+    font-size: 9pt !important;
+    font-weight: 900 !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: center !important;
+  }
+
+  /* الفوتر ثابت أسفل الصفحة */
+  .print-footer {
+    position: absolute !important;
+    right: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 25mm !important;
+    z-index: 2 !important;
+    overflow: hidden !important;
+    background-image: url("background2.jpg") !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom center !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* ضغط محتوى الاستمارة */
+  .fgrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2.2px 8px !important;
+    width: 100% !important;
+    height: auto !important;
+    align-content: start !important;
+  }
+
+  .sec {
+    height: 18px !important;
+    min-height: 18px !important;
+    padding: 1px 7px !important;
+    margin: 2px 0 1px 0 !important;
+    font-size: 7pt !important;
+    line-height: 16px !important;
+    border-radius: 3px !important;
+  }
+
+  .field {
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .lbl {
+    font-size: 6.3pt !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .fi {
+    height: 18px !important;
+    min-height: 18px !important;
+    padding: 0 5px !important;
+    font-size: 6.7pt !important;
+    line-height: 17px !important;
+  }
+
+  textarea.fi {
+    height: 22px !important;
+    min-height: 22px !important;
+    padding: 1px 5px !important;
+  }
+
+  .opt {
+    height: 18px !important;
+    min-height: 18px !important;
+    padding: 0 4px !important;
+    font-size: 6.4pt !important;
+    line-height: 17px !important;
+  }
+
+  .opts,
+  .yn,
+  .prog-row {
+    gap: 2px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .ptile {
+    height: 18px !important;
+    min-height: 18px !important;
+    padding: 0 4px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    white-space: nowrap !important;
+  }
+
+  .pnum,
+  .plbl {
+    display: inline !important;
+    font-size: 6.5pt !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .decl-sig {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 5px !important;
+    margin: 0 !important;
+  }
+
+  .decl-col {
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 3px 6px !important;
+    font-size: 6.1pt !important;
+    line-height: 1.25 !important;
+    overflow: hidden !important;
+  }
+
+  .decl-date {
+    margin-top: 2px !important;
+    padding-top: 1px !important;
+    font-size: 6pt !important;
+  }
+
+  .sig-box {
+    height: 38px !important;
+    min-height: 38px !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  #sigCanvas {
+    display: none !important;
+  }
+
+  #sigText {
+    display: none !important;
+  }
+
+  #sigImgPrint {
+    display: block !important;
+    height: 35px !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  .sig-tabs-row,
+  .sig-clr-row {
+    display: none !important;
+  }
+
+  .top-meta,
+  .title-block,
+  .greeting,
+  .divider {
+    margin-top: 0 !important;
+    margin-bottom: 1px !important;
+  }
+
+  .title-main {
+    font-size: 14pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .title-sub {
+    font-size: 8.5pt !important;
+    line-height: 1.05 !important;
+  }
+
+  .greeting {
+    font-size: 6.2pt !important;
+    line-height: 1.25 !important;
+    padding: 2px 4px !important;
+    margin: 2px 0 !important;
+  }
+
+  .opt input:checked ~ .dot::after {
+    font-size: 5px !important;
+  }
 }
 </style>
 </head>
 <body>
 
 <div class="a4">
-  <img src="background1.jpg" class="bg-top" alt="الهيدر">
-  <img src="background2.jpg" class="bg-bot" alt="الفوتر">
-  
-  <div class="a4-body">
 
-    <div class="top-meta">
-      <span class="meta-txt lg">الإدارة العامة للتعليم بمنطقة المدينة المنورة</span>
-      <span class="meta-txt">متوسطة الحسن البصري</span>
-    </div>
+  <!-- الهيدر ثابت -->
+  <div class="print-header"></div>
+  
+  <!-- منطقة المحتوى محصورة -->
+  <div class="print-content">
 
     <div class="title-block">
       <span class="title-main">استمارة متابعة إنهاء المناهج الدراسية</span>
@@ -403,8 +631,7 @@ textarea.fi { resize: none; height: 30px; }
               <button class="stab on" onclick="swSig('draw')">✍️ رسم التوقيع</button>
               <button class="stab" onclick="swSig('type')">⌨️ كتابة الاسم</button>
             </div>
-            <canvas id="sigCanvas" width="400" height="60"></canvas>
-            <!-- الصورة تتحدث فورياً لتكون جاهزة دائماً للطباعة -->
+            <canvas id="sigCanvas" width="400" height="50"></canvas>
             <img id="sigImgPrint" alt="التوقيع">
             <input type="text" id="sigText" class="fi" placeholder="اكتب اسمك كاملاً">
             <div class="sig-clr-row">
@@ -415,18 +642,21 @@ textarea.fi { resize: none; height: 30px; }
       </div>
 
     </div>
-
-    <!-- الأسماء تحت الإقرار مباشرة -->
-    <div class="btm-footer">
-      <div class="ftperson">
-        <span class="ft-title">وكيل المدرسة / عبدالغفور العمري</span>
-      </div>
-      <div class="ftperson">
-        <span class="ft-title">مدير المدرسة / سلطان السحيمي</span>
-      </div>
-    </div>
-
   </div>
+
+  <!-- الأسماء ثابتة فوق الفوتر -->
+  <div class="print-signatures">
+    <div class="ftperson">
+      <div class="ft-inp">وكيل المدرسة / عبدالغفور العمري</div>
+    </div>
+    <div class="ftperson">
+      <div class="ft-inp">مدير المدرسة / سلطان السحيمي</div>
+    </div>
+  </div>
+
+  <!-- الفوتر ثابت -->
+  <div class="print-footer"></div>
+
 </div>
 
 <div class="actions">
@@ -450,14 +680,14 @@ const cv = document.getElementById('sigCanvas');
 const cx = cv.getContext('2d');
 let drw = false, lx = 0, ly = 0;
 
-// تحديث صورة التوقيع فورياً (الحل الجذري لاختفاء التوقيع)
 function syncSignature() {
   const txt = document.getElementById('sigText');
   const isText = document.querySelectorAll('.stab')[1].classList.contains('on');
+  
   if (isText) {
     cx.clearRect(0, 0, cv.width, cv.height);
     if (txt.value.trim()) {
-      cx.font = 'bold 24px Cairo, sans-serif';
+      cx.font = 'bold 22px Cairo, sans-serif';
       cx.fillStyle = '#0a2440';
       cx.textAlign = 'center';
       cx.textBaseline = 'middle';
@@ -491,10 +721,13 @@ cv.addEventListener('touchmove', e => {
 }, {passive: false});
 cv.addEventListener('touchend', () => { drw = false; syncSignature(); });
 
-// ربط التحديث مع الكتابة أيضاً
 document.getElementById('sigText').addEventListener('input', syncSignature);
 
-function clrSig(){ cx.clearRect(0, 0, cv.width, cv.height); document.getElementById('sigText').value = ''; document.getElementById('sigImgPrint').src = ''; }
+function clrSig(){ 
+  cx.clearRect(0, 0, cv.width, cv.height); 
+  document.getElementById('sigText').value = ''; 
+  document.getElementById('sigImgPrint').src = ''; 
+}
 
 function swSig(t){
   document.querySelectorAll('.stab').forEach(b => b.classList.remove('on'));
@@ -510,9 +743,8 @@ document.querySelectorAll('input[name="st"]').forEach((r, i) => {
   r.addEventListener('change', () => { document.getElementById('lateF').style.display = (i === 2 && r.checked) ? 'flex' : 'none'; });
 });
 
-// دالة الطباعة
 function doPrint(){ 
-  syncSignature(); // تأكيد أخير على حفظ التوقيع كصورة قبل فتح النافذة
+  syncSignature(); 
   window.print(); 
 }
 
