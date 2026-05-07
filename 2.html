@@ -29,7 +29,6 @@ body {
 .a4 {
   width: 100%;
   max-width: 210mm; 
-  min-height: 297mm; 
   height: auto;
   position: relative; 
   overflow: hidden;
@@ -42,7 +41,8 @@ body {
   position: absolute; 
   top: 0; left: 0; right: 0; bottom: 0;
   width: 100%; height: 100%;
-  object-fit: fill;
+  object-fit: cover; 
+  object-position: center;
   z-index: 0;
 }
 .a4-body {
@@ -177,7 +177,6 @@ textarea.fi { resize: vertical; min-height: 22px; }
 
 /* ══ DECLARATION + SIGNATURE ══ */
 .decl-sig {
-  grid-column: 1/-1;
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 5px; align-items: stretch;
 }
@@ -234,20 +233,20 @@ textarea.fi { resize: vertical; min-height: 22px; }
   padding:1.5px 6px; cursor:pointer;
 }
 
-/* ══ BOTTOM FOOTER ══ */
+/* ══ BOTTOM FOOTER (MOVED RIGHT AFTER DECLARATION) ══ */
 .btm-footer {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-top:2px; padding-top:2px;
-  border-top:1.5px solid #c8971a; flex-shrink:0; width: 100%;
+  grid-column: 1/-1;
+  display:flex; justify-content:space-around; align-items:center;
+  margin-top:4px; padding-top:4px;
+  border-top:1.5px dashed #c8971a; width: 100%;
 }
 .ftperson { display:flex; flex-direction:column; align-items:center; gap:2px; }
 .ft-inp {
   font-family:'Cairo',sans-serif;
-  font-size:7.2pt; font-weight:700; color:#0a2440;
+  font-size:8pt; font-weight:800; color:#0a2440;
   border:none; background:transparent;
-  padding:1px 3px; min-width:90px; direction:rtl; text-align:center;
+  padding:2px 5px; direction:rtl; text-align:center;
 }
-.ft-inp.name { color:#145a32; }
 
 /* ══ BUTTONS ══ */
 .actions {
@@ -280,27 +279,25 @@ textarea.fi { resize: vertical; min-height: 22px; }
   .lbl { font-size: 8pt !important; }
   .fi { font-size: 8.5pt; min-height: 24px; }
   .prog-row .ptile { flex: 1 1 45%; }
-  .btm-footer { flex-direction: column; align-items: center; gap: 10px; }
+  .btm-footer { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 15px; }
 }
 
 /* =========================================
-   🖨️ STRICT PRINT SETTINGS (A4 ONLY - SINGLE PAGE)
+   🖨️ STRICT PRINT SETTINGS (100% FIT)
    ========================================= */
 @media print {
   @page { size: A4 portrait; margin: 0; }
   html, body { 
-    width: 210mm !important; 
-    height: 297mm !important; 
-    max-height: 297mm !important;
+    width: 100% !important; 
+    height: 100% !important; 
     background: white !important; 
     padding: 0 !important; margin: 0 !important; 
-    overflow: hidden !important; /* يمنع ظهور صفحة ثانية بشكل قاطع */
+    overflow: hidden !important; 
   }
   
   .a4 { 
-    width: 210mm !important; 
-    height: 297mm !important; 
-    max-height: 297mm !important;
+    width: 100% !important; 
+    height: 100% !important; 
     max-width: none !important; 
     box-shadow: none !important; 
     margin: 0 !important;
@@ -308,7 +305,7 @@ textarea.fi { resize: vertical; min-height: 22px; }
   }
   
   .a4-body { 
-    padding: 10mm 12mm 10mm 12mm !important; 
+    padding: 10mm 10mm 5mm 10mm !important; 
     height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
@@ -396,8 +393,8 @@ textarea.fi { resize: vertical; min-height: 22px; }
 
   .btm-footer { 
     flex-direction: row !important; 
-    align-items: flex-start !important; 
-    margin-top: auto !important; 
+    justify-content: space-around !important;
+    margin-top: 6px !important; 
     padding-top: 6px !important;
   }
   
@@ -455,7 +452,6 @@ textarea.fi { resize: vertical; min-height: 22px; }
       <div class="field">
         <span class="lbl"><span class="req">* </span>المرحلة الدراسية</span>
         <div class="opts">
-          <!-- خيار وحيد للمرحلة المتوسطة -->
           <label class="opt"><input type="radio" name="stage" value="متوسطة" checked><span class="dot"></span>المتوسطة</label>
         </div>
       </div>
@@ -567,19 +563,19 @@ textarea.fi { resize: vertical; min-height: 22px; }
             </div>
           </div>
         </div>
+        
+        <!-- BOTTOM FOOTER (MOVED RIGHT AFTER DECLARATION IN THE GRID) -->
+        <div class="btm-footer">
+          <div class="ftperson">
+            <div class="ft-inp">وكيل المدرسة / عبدالغفور العمري</div>
+          </div>
+          <div class="ftperson">
+            <div class="ft-inp">مدير المدرسة / سلطان السحيمي</div>
+          </div>
+        </div>
       </div>
 
     </div><!-- /fgrid -->
-
-    <!-- BOTTOM FOOTER -->
-    <div class="btm-footer">
-      <div class="ftperson">
-        <div class="ft-inp">وكيل المدرسة / عبدالغفور العمري</div>
-      </div>
-      <div class="ftperson">
-        <div class="ft-inp">مدير المدرسة / سلطان السحيمي</div>
-      </div>
-    </div>
 
   </div><!-- /a4-body -->
 </div><!-- /a4 -->
