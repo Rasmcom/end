@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>استمارة متابعة إنهاء المناهج الدراسية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --page-w: 210mm;
+      --page-h: 297mm;
+      --safe-w: 198mm; /* مساحة آمنة للطباعة من الجوال */
+      --safe-h: 281mm;
+      --navy: #0a2a47;
+      --navy2:#0f3e67;
+      --green:#18643b;
+      --gold:#d7a229;
+      --line:#c3cdd6;
+      --text:#0b2b47;
+      --scale:1;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      min-height:100%;
+      font-family:'Cairo',Tahoma,Arial,sans-serif;
+      background:#edf1f5;
+      color:var(--text);
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
+    body{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+      padding:18px 8px 28px;
+      overflow-x:hidden;
+    }
+
+    .page-viewport{
+      width:calc(var(--page-w) * var(--scale));
+      height:calc(var(--page-h) * var(--scale));
+      max-width:100%;
+      position:relative;
+    }
+
+    .a4-page{
+      width:var(--page-w);
+      height:var(--page-h);
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%) scale(var(--scale));
+      transform-origin:top center;
+      background:#fff;
+      overflow:hidden;
+      isolation:isolate;
+      box-shadow:0 18px 42px rgba(15,38,64,.20);
+    }
+
+    .page-img{
+      position:absolute;
+      z-index:1;
+      user-select:none;
+      pointer-events:none;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
+    .bg-top{top:0;left:0;width:100%;height:auto;display:block}
+    .bg-bottom{bottom:0;left:0;width:100%;height:auto;display:block}
+    .moe-logo{
+      top:9.5mm;
+      right:9.5mm;
+      width:57mm; /* شعار أكبر مع إبعاد عن الهيدر */
+      height:auto;
+      z-index:4;
+    }
+
+    .a4-page::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:0;
+      background:#fff;
+    }
+
+    .content{
+      position:relative;
+      z-index:5;
+      width:100%;
+      height:100%;
+      padding:30mm 12mm 18mm 12mm;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .title-block{
+      text-align:center;
+      margin-top:10mm; /* تعويض حذف الإدارة والمدرسة */
+      margin-bottom:1.6mm;
+      padding-inline:24mm 34mm; /* إفساح للشعار الكبير */
+    }
+    .title-block h1{
+      font-size:15.8pt;
+      font-weight:900;
+      line-height:1.22;
+      color:#0a2946;
+      letter-spacing:0 !important;
+      word-spacing:0 !important;
+      font-kerning:normal;
+      font-variant-ligatures: common-ligatures contextual;
+      text-rendering:optimizeLegibility;
+      unicode-bidi:plaintext;
+      direction:rtl;
+    }
+    .title-block .year{
+      display:block;
+      margin-top:.8mm;
+      font-size:10.2pt;
+      font-weight:900;
+      color:var(--green);
+      letter-spacing:0 !important;
+      word-spacing:0 !important;
+      text-rendering:optimizeLegibility;
+      unicode-bidi:plaintext;
+      direction:rtl;
+    }
+
+    .rule{
+      width:100%;
+      height:1.2mm;
+      margin:0 0 1.4mm;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--green) 17%, var(--gold) 50%, var(--green) 83%, rgba(255,255,255,0) 100%);
+    }
+
+    .intro{
+      min-height:8mm;
+      display:flex;
+      align-items:center;
+      background:#fff8de;
+      border-right:3mm solid var(--gold);
+      border-radius:1.2mm 0 0 1.2mm;
+      color:#4a390c;
+      font-size:7.25pt;
+      font-weight:800;
+      line-height:1.55;
+      padding:1.2mm 2.2mm;
+      margin-bottom:1.35mm;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:.95mm 2.6mm;
+      align-items:start;
+    }
+    .full{grid-column:1/-1}
+
+    .section{
+      height:5.3mm;
+      display:flex;
+      align-items:center;
+      gap:1.55mm;
+      border-radius:1.25mm;
+      padding:0 2.2mm;
+      background:linear-gradient(135deg,var(--navy),var(--navy2));
+      color:#fff;
+      font-size:8.1pt;
+      font-weight:900;
+      line-height:1;
+    }
+    .section::before{
+      content:"";
+      width:1.1mm;
+      height:4mm;
+      border-radius:999px;
+      background:#ebb332;
+      flex:0 0 auto;
+    }
+
+    .field{display:flex;flex-direction:column;gap:.5mm;min-width:0}
+    .label{
+      min-height:3.1mm;
+      color:#182d44;
+      font-size:7.1pt;
+      font-weight:900;
+      line-height:1.15;
+      white-space:nowrap;
+    }
+    .req{color:#cf2e2e}
+
+    input,textarea,button{font-family:'Cairo',Tahoma,Arial,sans-serif}
+
+    .input{
+      width:100%;
+      height:6.1mm;
+      border:1px solid var(--line);
+      border-radius:1.2mm;
+      background:#fff;
+      color:#0c2037;
+      font-size:7.55pt;
+      font-weight:700;
+      line-height:1.35;
+      padding:1.05mm 2.1mm .7mm;
+      direction:rtl;
+      outline:none;
+      appearance:none;
+      -webkit-appearance:none;
+      text-align:right;
+      vertical-align:middle;
+    }
+    .input:focus{border-color:var(--green);box-shadow:0 0 0 .6mm rgba(24,100,59,.10)}
+    textarea.input{height:6.8mm;line-height:1.35;padding-top:.9mm;resize:none}
+
+    .row,.yn-row,.progress-row{display:flex;gap:.9mm;align-items:stretch;width:100%}
+    .opt,.progress{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.9mm;
+      flex:1 1 0;
+      min-width:0;
+      height:5.45mm;
+      border:1px solid #c9d1d8;
+      border-radius:1.2mm;
+      background:#fff;
+      color:#182d44;
+      font-size:7.05pt;
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      cursor:pointer;
+      user-select:none;
+    }
+    .opt input,.progress input{position:absolute;opacity:0;pointer-events:none}
+    .mark{
+      width:2.8mm;height:2.8mm;border:1.35px solid #9aa7b3;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+    }
+    .checkbox .mark{border-radius:.65mm}
+    .opt:has(input:checked),.progress:has(input:checked){border-color:var(--green);background:#eaf8f0;color:var(--green)}
+    .opt:has(input:checked) .mark,.progress:has(input:checked) .mark{border-color:var(--green);background:var(--green)}
+    .opt:has(input:checked) .mark::after,.progress:has(input:checked) .mark::after{content:"✓";color:#fff;font-size:6pt;font-weight:900}
+
+    .progress{gap:.55mm;padding:0 1mm;flex-basis:25%}
+    .progress .percent{font-size:7.35pt;font-weight:900;color:#374151}
+    .progress .caption{font-size:6.75pt;font-weight:800;color:#6b7280}
+    .progress:has(input:checked) .percent,.progress:has(input:checked) .caption{color:var(--green)}
+
+    .late-wrap{display:none}
+    .late-wrap.show{display:flex}
+
+    .declaration-wrap{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:2.1mm;
+      align-items:stretch;
+      margin-top:.2mm;
+    }
+    .declaration{
+      min-height:18mm;
+      border:1.15px solid #8cdfa7;
+      border-radius:1.45mm;
+      background:#f2fdf5;
+      padding:2mm 2.4mm 1.6mm;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      color:#135930;
+      font-size:7.05pt;
+      font-weight:800;
+      line-height:1.55;
+    }
+    .decl-date{
+      margin-top:1mm;
+      padding-top:1mm;
+      border-top:1px dashed #8cdfa7;
+      color:#0b2b47;
+      font-size:7.35pt;
+      font-weight:900;
+    }
+
+    .sig-area{min-height:18mm;display:grid;grid-template-rows:auto 1fr;gap:1mm}
+    .sig-title{text-align:center;color:#182d44;font-size:7.95pt;font-weight:900}
+    .sig-box{
+      border:1.15px solid #bec9d3;border-radius:1.45mm;background:#fff;overflow:hidden;display:grid;grid-template-rows:5mm 1fr 4.1mm;min-height:15.1mm;
+    }
+    .sig-tabs{display:flex;border-bottom:1px solid #e6ebf0;background:#f7f9fb}
+    .sig-tab{flex:1;border:0;background:transparent;color:#47596b;font-size:6.65pt;font-weight:900;cursor:pointer}
+    .sig-tab.active{background:var(--green);color:#fff}
+    .sig-stage{position:relative;min-height:0}
+    #sigCanvas{width:100%;height:100%;display:block;background:#fff;cursor:crosshair;touch-action:none}
+    #sigImgPrint{width:100%;height:100%;object-fit:contain;display:none;background:transparent}
+    #sigText{width:100%;height:100%;border:0;outline:0;display:none;text-align:center;direction:rtl;color:#0b2b47;font-size:12pt;font-weight:900;background:#fff;padding:0 2mm}
+    .sig-tools{display:flex;align-items:center;justify-content:flex-start;padding:0 1.5mm;border-top:1px solid #eef2f5;background:#f8fafc}
+    .sig-clear{border:0;border-radius:1mm;background:#fee2e2;color:#b91c1c;font-size:6.15pt;font-weight:900;padding:.5mm 1.7mm;cursor:pointer}
+
+    .footer-names{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      padding:0 8mm;
+      margin-top:12mm;
+      position:relative;
+      z-index:6;
+    }
+    .footer-name{
+      min-width:55mm;
+      text-align:center;
+      color:#082744;
+      font-size:12pt;
+      font-weight:900;
+      line-height:1.2;
+    }
+
+    .actions{width:min(100%,210mm);display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:0 8px}
+    .btn{border:0;border-radius:12px;color:#fff;font-size:14px;font-weight:900;padding:11px 22px;cursor:pointer;box-shadow:0 8px 22px rgba(11,43,71,.15);transition:transform .15s ease}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-print{background:linear-gradient(135deg,#18643b,#208d51)}
+    .btn-pdf{background:linear-gradient(135deg,#0b2b47,#165581)}
+    .btn-reset{background:linear-gradient(135deg,#a11f1f,#dc2626)}
+    .note{width:min(100%,210mm);text-align:center;color:#5c6a79;font-size:12px;line-height:1.75}
+
+    @media screen and (max-width:768px){
+      body{padding:8px 4px 20px;gap:10px}
+      .main-btn,.btn{width:calc(50% - 6px);padding:10px 8px;font-size:13px}
+      .btn-reset{width:100%}
+    }
+
+    @page{size:A4 portrait;margin:0}
+
+    @media print{
+      html,body{
+        width:auto !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+        overflow:visible !important;
+      }
+      body{display:block !important}
+
+      .actions,.note{display:none !important}
+
+      /* تقليص آمن للطباعة من الجوال حتى لا يظهر ورق ثانٍ */
+      .page-viewport{
+        width:var(--safe-w) !important;
+        height:var(--safe-h) !important;
+        max-width:none !important;
+        margin:0 auto !important;
+        overflow:hidden !important;
+        page-break-after:avoid !important;
+        break-after:avoid !important;
+      }
+      .a4-page{
+        position:relative !important;
+        top:0 !important;
+        left:0 !important;
+        transform:none !important;
+        width:var(--safe-w) !important;
+        height:var(--safe-h) !important;
+        margin:0 auto !important;
+        box-shadow:none !important;
+        overflow:hidden !important;
+        page-break-inside:avoid !important;
+        break-inside:avoid !important;
+      }
+      .content{
+        padding:27mm 10.5mm 16mm 10.5mm !important;
+      }
+      .title-block{
+        margin-top:6mm !important;
+        padding-inline:24mm 28mm !important;
+      }
+      .moe-logo{
+        top:6.5mm !important;
+        right:9.5mm !important;
+        width:36mm !important;
+      }
+      .footer-names{margin-top:10.5mm !important}
+
+      .page-img,.a4-page,.section,.intro,.declaration,.opt,.progress{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+      }
+
+      .sig-tabs,.sig-tools{display:none !important}
+      .sig-box{border:0 !important;background:transparent !important;grid-template-rows:1fr !important;min-height:13mm !important}
+      #sigCanvas,#sigText{display:none !important}
+      #sigImgPrint{display:block !important;width:100% !important;height:13mm !important;object-fit:contain !important}
+
+      input::placeholder,textarea::placeholder{color:#7a8490 !important;opacity:1 !important}
+    }
+  
+    /* =====================================================
+       FINAL OVERRIDE V3:
+       حل مشكلة صفحتين في متصفحات الجوال
+       الفكرة: لا نطبع A4 بالحجم الكامل؛ نطبع ورقة A4 مصغّرة داخل مساحة آمنة
+       لأن الجوال يفرض رأس/تذييل وهوامش غير قابلة للإلغاء دائمًا.
+       ===================================================== */
+    @media print{
+      :root{ --scale:1 !important; }
+
+      @page{
+        size:A4 portrait;
+        margin:0;
+      }
+
+      html,
+      body{
+        width:210mm !important;
+        height:297mm !important;
+        min-width:0 !important;
+        min-height:0 !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+        overflow:hidden !important;
+      }
+
+      body{
+        display:block !important;
+      }
+
+      .actions,
+      .note{
+        display:none !important;
+      }
+
+      .page-viewport{
+        width:180.6mm !important;   /* 210mm × 0.86 */
+        height:255.42mm !important; /* 297mm × 0.86 */
+        max-width:none !important;
+        max-height:none !important;
+        margin:0 auto !important;
+        padding:0 !important;
+        overflow:hidden !important;
+        position:relative !important;
+        page-break-before:avoid !important;
+        page-break-after:avoid !important;
+        page-break-inside:avoid !important;
+        break-before:avoid !important;
+        break-after:avoid !important;
+        break-inside:avoid !important;
+      }
+
+      .a4-page{
+        position:absolute !important;
+        top:0 !important;
+        left:50% !important;
+        width:210mm !important;
+        height:297mm !important;
+        max-width:none !important;
+        max-height:none !important;
+        margin:0 !important;
+        padding:0 !important;
+        transform:translateX(-50%) scale(.86) !important;
+        transform-origin:top center !important;
+        box-shadow:none !important;
+        overflow:hidden !important;
+        page-break-before:avoid !important;
+        page-break-after:avoid !important;
+        page-break-inside:avoid !important;
+        break-before:avoid !important;
+        break-after:avoid !important;
+        break-inside:avoid !important;
+      }
+
+      .content{
+        padding:30mm 12mm 18mm 12mm !important;
+      }
+
+      .title-block{
+        margin-top:10mm !important;
+        padding-inline:28mm 38mm !important;
+      }
+
+      .moe-logo{
+        width:57mm !important;
+        top:9mm !important;
+        right:8.5mm !important;
+      }
+
+      .footer-names{
+        margin-top:11mm !important;
+      }
+
+      .page-img,
+      .a4-page,
+      .section,
+      .intro,
+      .declaration,
+      .opt,
+      .progress{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+      }
+
+      .sig-tabs,
+      .sig-tools{
+        display:none !important;
+      }
+
+      .sig-box{
+        border:0 !important;
+        background:transparent !important;
+        grid-template-rows:1fr !important;
+        min-height:13mm !important;
+      }
+
+      #sigCanvas,
+      #sigText{
+        display:none !important;
+      }
+
+      #sigImgPrint{
+        display:block !important;
+        width:100% !important;
+        height:13mm !important;
+        object-fit:contain !important;
+      }
+    }
+
+  
+    /* وضع خاص لتوليد PDF: يوقف التصغير والتحويلات ويلتقط A4 الحقيقي */
+    body.exporting-pdf{
+      background:#fff !important;
+      padding:0 !important;
+      margin:0 !important;
+      display:block !important;
+    }
+    body.exporting-pdf .actions,
+    body.exporting-pdf .note{
+      display:none !important;
+    }
+    body.exporting-pdf .page-viewport{
+      width:210mm !important;
+      height:297mm !important;
+      margin:0 !important;
+      padding:0 !important;
+      overflow:hidden !important;
+      max-width:none !important;
+    }
+    body.exporting-pdf .a4-page{
+      position:relative !important;
+      top:0 !important;
+      left:0 !important;
+      width:210mm !important;
+      height:297mm !important;
+      transform:none !important;
+      box-shadow:none !important;
+      margin:0 !important;
+    }
+
+  
+    .capture-field{
+      width:100%;
+      min-height:6.1mm;
+      border:1px solid var(--line);
+      border-radius:1.2mm;
+      background:#fff;
+      color:#0c2037;
+      font-size:7.55pt;
+      font-weight:700;
+      line-height:1.35;
+      padding:1.05mm 2.1mm .7mm;
+      direction:rtl;
+      text-align:right;
+      display:flex;
+      align-items:center;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .capture-field.multiline{
+      min-height:6.8mm;
+      white-space:pre-wrap;
+      align-items:flex-start;
+    }
+
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+  <main class="page-viewport" id="pageViewport" aria-label="معاينة استمارة A4">
+    <section class="a4-page" id="printPage">
+      <img class="page-img bg-top" data-smart-src="background4" alt="خلفية أعلى الصفحة">
+      <img class="page-img bg-bottom" data-smart-src="background5" alt="خلفية أسفل الصفحة">
+      <img class="page-img moe-logo" data-smart-src="logoM" alt="شعار وزارة التعليم">
+
+      <div class="content">
+        <div class="title-block">
+          <h1>استمارة متابعة إنهاء المناهج الدراسية</h1>
+          <span class="year">الفصل الدراسي الثاني لعام ١٤٤٧هـ</span>
+        </div>
+
+        <div class="rule" aria-hidden="true"></div>
+
+        <div class="intro">
+          <span><strong>عزيزي المعلم.. السلام عليكم ورحمة الله وبركاته،،</strong> انطلاقًا من الحرص على متابعة سير العملية التعليمية وضمان إنهاء المقررات الدراسية وفق الخطة الزمنية المعتمدة، يرجى التكرم بتعبئة هذه الاستمارة بدقة لتوثيق إنجازاتك. <strong>شاكرين لك جهودك في بناء جيل المستقبل.</strong></span>
+        </div>
+
+        <form class="grid" id="followupForm" autocomplete="on">
+          <div class="section full">أولاً: البيانات الشخصية</div>
+
+          <label class="field">
+            <span class="label"><span class="req">*</span> اسم المعلم الثلاثي</span>
+            <input class="input" type="text" name="teacherName" placeholder="الاسم الثلاثي كاملاً">
+          </label>
+
+          <label class="field">
+            <span class="label"><span class="req">*</span> المادة التي تدرسها</span>
+            <input class="input" type="text" name="subject" placeholder="اسم المادة الدراسية">
+          </label>
+
+          <div class="section full">ثانياً: بيانات الصف والفصل</div>
+
+          <div class="field">
+            <span class="label"><span class="req">*</span> المرحلة والصف</span>
+            <div class="row" role="group" aria-label="المرحلة والصف">
+              <label class="opt checkbox"><input type="checkbox" name="grade" value="الأول متوسط"><span class="mark"></span><span>الأول متوسط</span></label>
+              <label class="opt checkbox"><input type="checkbox" name="grade" value="الثاني متوسط"><span class="mark"></span><span>الثاني متوسط</span></label>
+              <label class="opt checkbox"><input type="checkbox" name="grade" value="الثالث متوسط"><span class="mark"></span><span>الثالث متوسط</span></label>
+            </div>
+          </div>
+
+          <label class="field">
+            <span class="label"><span class="req">*</span> الفصل / الشعبة (اكتب الفصول بدقة)</span>
+            <input class="input" type="text" name="classroom" placeholder="مثال: أ، ب، 1، 2، 3...">
+          </label>
+
+          <div class="section full">ثالثاً: حالة إنهاء المنهج والإنجاز</div>
+
+          <div class="field">
+            <span class="label"><span class="req">*</span> حالة الانتهاء من المنهج</span>
+            <div class="row" role="group" aria-label="حالة الانتهاء من المنهج">
+              <label class="opt"><input type="radio" name="status" value="تم الانتهاء كاملاً"><span class="mark"></span><span>تم الانتهاء كاملاً</span></label>
+              <label class="opt"><input type="radio" name="status" value="جاري إنهاء المتبقي"><span class="mark"></span><span>جاري إنهاء المتبقي</span></label>
+              <label class="opt"><input type="radio" name="status" value="متأخر عن الخطة" id="lateStatus"><span class="mark"></span><span>متأخر عن الخطة</span></label>
+            </div>
+          </div>
+
+          <label class="field">
+            <span class="label">تاريخ الانتهاء من المنهج</span>
+            <input class="input" type="date" name="finishDate">
+          </label>
+
+          <label class="field full late-wrap" id="lateReasonWrap">
+            <span class="label">أسباب التأخر عن الخطة الزمنية</span>
+            <textarea class="input" name="lateReason" placeholder="اكتب أسباب التأخر هنا..."></textarea>
+          </label>
+
+          <div class="field full">
+            <span class="label"><span class="req">*</span> نسبة الإنجاز الفعلية للمنهج</span>
+            <div class="progress-row" role="group" aria-label="نسبة الإنجاز الفعلية للمنهج">
+              <label class="progress"><input type="radio" name="progress" value="100"><span class="percent">١٠٠٪</span><span class="caption">- مكتمل</span></label>
+              <label class="progress"><input type="radio" name="progress" value="90"><span class="percent">٩٠٪</span><span class="caption">- متقدم جداً</span></label>
+              <label class="progress"><input type="radio" name="progress" value="80"><span class="percent">٨٠٪</span><span class="caption">- متقدم</span></label>
+              <label class="progress"><input type="radio" name="progress" value="less80"><span class="percent">أقل ٨٠٪</span><span class="caption">- يحتاج متابعة</span></label>
+            </div>
+          </div>
+
+          <div class="section full">رابعاً: المتابعة والتقييم</div>
+
+          <div class="field">
+            <span class="label"><span class="req">*</span> رصد درجات الاختبارات الفترية؟</span>
+            <div class="yn-row">
+              <label class="opt"><input type="radio" name="q1" value="نعم"><span class="mark"></span><span>نعم</span></label>
+              <label class="opt"><input type="radio" name="q1" value="لا"><span class="mark"></span><span>لا</span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label"><span class="req">*</span> تقييم المهام الأدائية والمشاريع؟</span>
+            <div class="yn-row">
+              <label class="opt"><input type="radio" name="q2" value="نعم"><span class="mark"></span><span>نعم</span></label>
+              <label class="opt"><input type="radio" name="q2" value="لا"><span class="mark"></span><span>لا</span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label"><span class="req">*</span> تسليم سجلات المتابعة للإدارة؟</span>
+            <div class="yn-row">
+              <label class="opt"><input type="radio" name="q3" value="نعم"><span class="mark"></span><span>نعم</span></label>
+              <label class="opt"><input type="radio" name="q3" value="لا"><span class="mark"></span><span>لا</span></label>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label"><span class="req">*</span> تنفيذ خطة المراجعة النهائية؟</span>
+            <div class="yn-row">
+              <label class="opt"><input type="radio" name="q4" value="نعم"><span class="mark"></span><span>نعم</span></label>
+              <label class="opt"><input type="radio" name="q4" value="لا"><span class="mark"></span><span>لا</span></label>
+            </div>
+          </div>
+
+          <div class="section full">خامساً: ملاحظات</div>
+
+          <label class="field">
+            <span class="label">رابط إثبات الإنجاز (اختياري)</span>
+            <input class="input" type="url" name="proofUrl" placeholder="https://...">
+          </label>
+
+          <label class="field">
+            <span class="label">ملاحظات إضافية / صعوبات:</span>
+            <textarea class="input" name="notes" placeholder="اكتب هنا..."></textarea>
+          </label>
+
+          <div class="section full">سادساً: الإقرار والتوقيع الإلكتروني</div>
+
+          <div class="declaration-wrap full">
+            <div class="declaration">
+              <div>أقر أنا المعلم المذكور أعلاه بصحة كافة البيانات المسجلة بخصوص إنهاء المناهج الدراسية المسندة إليّ، مع مراجعة المهارات الأساسية للطلاب ورصد الدرجات، وهذا إقرار مني بذلك.</div>
+              <div class="decl-date" id="declDate">التاريخ: ...</div>
+            </div>
+
+            <div class="sig-area">
+              <div class="sig-title">توقيع المعلم</div>
+              <div class="sig-box">
+                <div class="sig-tabs">
+                  <button class="sig-tab active" type="button" data-signature-mode="draw">رسم التوقيع</button>
+                  <button class="sig-tab" type="button" data-signature-mode="type">كتابة الاسم</button>
+                </div>
+                <div class="sig-stage">
+                  <canvas id="sigCanvas" width="800" height="160"></canvas>
+                  <img id="sigImgPrint" alt="التوقيع">
+                  <input id="sigText" type="text" placeholder="اكتب اسمك كاملاً">
+                </div>
+                <div class="sig-tools">
+                  <button class="sig-clear" type="button" id="clearSignature">مسح</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <footer class="footer-names">
+          <div class="footer-name">وكيل المدرسة / عبدالغفور العمري</div>
+          <div class="footer-name">مدير المدرسة / سلطان السحيمي</div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <div class="actions" aria-label="أزرار التحكم">
+    <button class="btn btn-print" type="button" id="printBtn">توليد PDF صفحة واحدة</button>
+    <button class="btn btn-pdf" type="button" id="pdfBtn">تحميل PDF</button>
+    <button class="btn btn-reset" type="button" id="resetBtn">مسح البيانات</button>
+  </div>
+
+  <p class="note">تم تحسين هذه النسخة: تم إبعاد الشعار عن الهيدر، تحسين ظهور عنوان الاستمارة بالعربية، ومعالجة ظهور النصوص داخل الحقول عند إنشاء PDF.</p>
+
+  <script>
+    function loadSmartImages(){
+      const exts=['png','jpg','jpeg','webp'];
+      document.querySelectorAll('[data-smart-src]').forEach(img=>{
+        const base=img.getAttribute('data-smart-src');
+        let i=0;
+        const tryLoad=()=>{
+          img.onerror=()=>{i+=1; if(i<exts.length) tryLoad(); else img.style.display='none';};
+          img.src='./'+base+'.'+exts[i];
+        };
+        tryLoad();
+      });
+    }
+
+    function setScreenScale(){
+      if(window.matchMedia('print').matches) return;
+      const pageWpx=210*(96/25.4);
+      const available=Math.max(320, window.innerWidth-16);
+      const scale=Math.min(1, available/pageWpx);
+      document.documentElement.style.setProperty('--scale', String(scale));
+    }
+
+    function getHijriDate(){
+      try{
+        const parts=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{day:'numeric',month:'numeric',year:'numeric'}).formatToParts(new Date());
+        const out={};
+        parts.forEach(p=>out[p.type]=p.value);
+        return `${out.day} / ${out.month} / ${out.year} هـ`;
+      }catch(e){
+        return new Date().toLocaleDateString('ar-SA');
+      }
+    }
+
+    const canvas=document.getElementById('sigCanvas');
+    const ctx=canvas.getContext('2d');
+    const sigText=document.getElementById('sigText');
+    const sigImg=document.getElementById('sigImgPrint');
+    let drawing=false, lastX=0, lastY=0, signatureMode='draw';
+
+    function prepCanvas(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.lineWidth=4;
+      ctx.lineCap='round';
+      ctx.lineJoin='round';
+      ctx.strokeStyle='#0b2b47';
+      ctx.fillStyle='#0b2b47';
+    }
+
+    function pos(e){
+      const r=canvas.getBoundingClientRect();
+      const p=e.touches ? e.touches[0] : e;
+      return {x:(p.clientX-r.left)*(canvas.width/r.width), y:(p.clientY-r.top)*(canvas.height/r.height)};
+    }
+
+    function syncSignature(){
+      if(signatureMode==='type'){
+        prepCanvas();
+        const val=sigText.value.trim();
+        if(val){
+          ctx.font='900 42px Cairo, Tahoma, Arial, sans-serif';
+          ctx.textAlign='center';
+          ctx.textBaseline='middle';
+          ctx.fillText(val, canvas.width/2, canvas.height/2);
+        }
+      }
+      sigImg.src=canvas.toDataURL('image/png');
+    }
+
+    function startDraw(e){
+      if(signatureMode!=='draw') return;
+      e.preventDefault();
+      drawing=true;
+      const p=pos(e); lastX=p.x; lastY=p.y;
+    }
+    function draw(e){
+      if(!drawing || signatureMode!=='draw') return;
+      e.preventDefault();
+      const p=pos(e);
+      ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke();
+      lastX=p.x; lastY=p.y;
+    }
+    function endDraw(){ if(drawing){ drawing=false; syncSignature(); } }
+
+    function setSignatureMode(mode){
+      signatureMode=mode;
+      document.querySelectorAll('[data-signature-mode]').forEach(btn=>btn.classList.toggle('active', btn.dataset.signatureMode===mode));
+      if(mode==='draw'){ canvas.style.display='block'; sigText.style.display='none'; }
+      else{ canvas.style.display='none'; sigText.style.display='block'; sigText.focus(); }
+      syncSignature();
+    }
+
+    function clearSignature(){ prepCanvas(); sigText.value=''; sigImg.removeAttribute('src'); }
+
+    function initLateReason(){
+      const wrap=document.getElementById('lateReasonWrap');
+      document.querySelectorAll('input[name="status"]').forEach(input=>{
+        input.addEventListener('change', ()=>{ wrap.classList.toggle('show', document.getElementById('lateStatus').checked); });
+      });
+    }
+
+    function waitForImages(){
+      const imgs=Array.from(document.images);
+      return Promise.all(imgs.map(img=>{
+        if(img.complete) return Promise.resolve();
+        return new Promise(resolve=>{ img.addEventListener('load', resolve, {once:true}); img.addEventListener('error', resolve, {once:true}); });
+      }));
+    }
+
+
+    function mirrorFormValuesForCapture(){
+      document.querySelectorAll('input, textarea').forEach(el=>{
+        if(el.type === 'checkbox' || el.type === 'radio'){
+          if(el.checked){ el.setAttribute('checked','checked'); }
+          else{ el.removeAttribute('checked'); }
+        }else{
+          el.setAttribute('value', el.value || '');
+          if(el.tagName === 'TEXTAREA') el.textContent = el.value || '';
+        }
+      });
+    }
+
+    
+    function buildCaptureClone(){
+      const original = document.getElementById('printPage');
+      const clone = original.cloneNode(true);
+      clone.id = 'printPageClone';
+
+      // تثبيت صورة التوقيع داخل النسخة الملتقطة
+      const cloneCanvas = clone.querySelector('#sigCanvas');
+      if(cloneCanvas) cloneCanvas.remove();
+
+      const cloneSigText = clone.querySelector('#sigText');
+      if(cloneSigText) cloneSigText.remove();
+
+      const cloneSigImg = clone.querySelector('#sigImgPrint');
+      if(cloneSigImg){
+        cloneSigImg.style.display = 'block';
+        cloneSigImg.style.width = '100%';
+        cloneSigImg.style.height = '100%';
+      }
+
+      // استبدال حقول الإدخال النصية بعناصر ثابتة حتى لا يختفي النص
+      clone.querySelectorAll('input.input, textarea.input').forEach((el, idx) => {
+        const tag = document.createElement('div');
+        const isTextarea = el.tagName.toLowerCase() === 'textarea';
+        tag.className = 'capture-field' + (isTextarea ? ' multiline' : '');
+        tag.setAttribute('dir', 'rtl');
+
+        let value = '';
+        if(el.tagName.toLowerCase() === 'textarea'){
+          value = el.value || el.textContent || '';
+        }else if(el.type === 'date'){
+          value = el.value || '';
+        }else{
+          value = el.value || '';
+        }
+
+        tag.textContent = value;
+        el.replaceWith(tag);
+      });
+
+      // إخفاء أدوات التوقيع في النسخة
+      clone.querySelectorAll('.sig-tools, .sig-tabs').forEach(el => el.remove());
+
+      return clone;
+    }
+
+    async function generateOnePagePDF(){
+      syncSignature();
+      mirrorFormValuesForCapture();
+
+      if(!window.html2canvas || !window.jspdf){
+        alert('تعذر تحميل مكتبات PDF. تأكد من اتصال الإنترنت ثم أعد المحاولة.');
+        return;
+      }
+
+      if(document.fonts && document.fonts.ready){
+        try{ await document.fonts.ready; }catch(e){}
+      }
+      await waitForImages();
+
+      document.body.classList.add('exporting-pdf');
+
+      const mount = document.createElement('div');
+      mount.style.position = 'fixed';
+      mount.style.left = '-10000px';
+      mount.style.top = '0';
+      mount.style.width = '210mm';
+      mount.style.height = '297mm';
+      mount.style.background = '#fff';
+      mount.style.zIndex = '-1';
+      document.body.appendChild(mount);
+
+      try{
+        const clone = buildCaptureClone();
+        mount.appendChild(clone);
+
+        await new Promise(resolve => requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+
+        const canvas = await html2canvas(clone, {
+          scale: 2.3,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          foreignObjectRendering: true,
+          width: clone.offsetWidth,
+          height: clone.offsetHeight,
+          windowWidth: clone.scrollWidth,
+          windowHeight: clone.scrollHeight,
+          scrollX: 0,
+          scrollY: 0
+        });
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.98);
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+          compress: true
+        });
+
+        pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+        pdf.save('استمارة-متابعة-إنهاء-المناهج-الدراسية.pdf');
+      }catch(err){
+        console.error(err);
+        alert('حدث خطأ أثناء توليد PDF. جرّب من Chrome أو Safari بعد إعادة تحميل الصفحة.');
+      }finally{
+        mount.remove();
+        document.body.classList.remove('exporting-pdf');
+        setScreenScale();
+      }
+    }
+
+
+      if(document.fonts && document.fonts.ready){
+        try{ await document.fonts.ready; }catch(e){}
+      }
+      await waitForImages();
+
+      const page = document.getElementById('printPage');
+      document.body.classList.add('exporting-pdf');
+
+      try{
+        await new Promise(resolve => requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+
+        const canvas = await html2canvas(page, {
+          scale: 2.5,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          width: page.offsetWidth,
+          height: page.offsetHeight,
+          windowWidth: page.scrollWidth,
+          windowHeight: page.scrollHeight,
+          scrollX: 0,
+          scrollY: 0
+        });
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.98);
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+          compress: true
+        });
+
+        pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+        pdf.save('استمارة-متابعة-إنهاء-المناهج-الدراسية.pdf');
+      }catch(err){
+        console.error(err);
+        alert('حدث خطأ أثناء توليد PDF. جرّب من متصفح Chrome أو Safari بعد إعادة تحميل الصفحة.');
+      }finally{
+        document.body.classList.remove('exporting-pdf');
+        setScreenScale();
+      }
+    }
+
+
+    async function doPrint(){
+      document.body.classList.add('printing-now');
+      syncSignature();
+      if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+      await waitForImages();
+      setTimeout(()=>window.print(),120);
+    }
+
+    function resetForm(){
+      if(!confirm('هل أنت متأكد من مسح بيانات الاستمارة؟')) return;
+      document.getElementById('followupForm').reset();
+      document.getElementById('lateReasonWrap').classList.remove('show');
+      clearSignature();
+    }
+
+    function init(){
+      loadSmartImages();
+      setScreenScale();
+      prepCanvas();
+      document.getElementById('declDate').textContent='التاريخ: '+getHijriDate();
+      initLateReason();
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      window.addEventListener('mouseup', endDraw);
+      canvas.addEventListener('mouseleave', endDraw);
+      canvas.addEventListener('touchstart', startDraw, {passive:false});
+      canvas.addEventListener('touchmove', draw, {passive:false});
+      canvas.addEventListener('touchend', endDraw);
+      sigText.addEventListener('input', syncSignature);
+
+      document.querySelectorAll('[data-signature-mode]').forEach(btn=>btn.addEventListener('click', ()=>setSignatureMode(btn.dataset.signatureMode)));
+      document.getElementById('clearSignature').addEventListener('click', clearSignature);
+      document.getElementById('printBtn').addEventListener('click', generateOnePagePDF);
+      document.getElementById('pdfBtn').addEventListener('click', generateOnePagePDF);
+      document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+      window.addEventListener('resize', setScreenScale);
+      window.addEventListener('beforeprint', ()=>{ document.documentElement.style.setProperty('--scale','1'); syncSignature(); });
+      window.addEventListener('afterprint', ()=>{ document.body.classList.remove('printing-now'); setScreenScale(); });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
