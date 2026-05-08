@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استمارة متابعة إنهاء المناهج - احترافي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══ السيت أب الأساسي ══ */
+:root {
+    --primary-color: #0a2440;
+    --secondary-color: #145a32;
+    --accent-color: #c8971a;
+    --border-color: #d1d5db;
+    --bg-light: #f9fafb;
+}
+
+*, *::before, *::after { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: #525659;
+    margin: 0;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ══ حاوية A4 الدقيقة ══ */
+.a4-container {
+    width: 210mm;
+    height: 297mm;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    overflow: hidden; /* يمنع ظهور صفحة ثانية */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ══ الخلفيات (الهيدر والفوتر) ══ */
+.bg-header { position: absolute; top: 0; left: 0; width: 100%; z-index: 1; }
+.bg-footer { position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1; }
+
+/* ══ جسم المحتوى ══ */
+.content {
+    position: relative;
+    z-index: 10;
+    padding: 35mm 15mm 20mm 15mm; /* هوامش دقيقة للمحتوى داخل الورقة */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ══ العناوين ══ */
+.header-table { width: 100%; margin-bottom: 15px; text-align: center; }
+.main-title { font-size: 20pt; font-weight: 900; color: var(--primary-color); margin: 0; line-height: 1.2; }
+.sub-title { font-size: 11pt; font-weight: 700; color: var(--secondary-color); margin-top: 5px; }
+
+.divider {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), var(--secondary-color), var(--accent-color), transparent);
+    margin: 10px 0;
+}
+
+.intro-text {
+    font-size: 9pt;
+    line-height: 1.6;
+    color: #444;
+    background: #fdfbf0;
+    padding: 8px 12px;
+    border-right: 4px solid var(--accent-color);
+    margin-bottom: 15px;
+}
+
+/* ══ تنسيق الأقسام ══ */
+.section-head {
+    background: linear-gradient(to left, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 4px 12px;
+    font-size: 10pt;
+    font-weight: 800;
+    border-radius: 4px;
+    margin: 12px 0 8px 0;
+    display: flex;
+    align-items: center;
+}
+.section-head::before { content: ""; width: 4px; height: 14px; background: var(--accent-color); margin-left: 8px; border-radius: 2px; }
+
+/* ══ الحقول والشبكة ══ */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+.full-width { grid-column: span 2; }
+
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 8.5pt; font-weight: 700; color: #1f2937; }
+.field-label .req { color: #e11d48; margin-right: 2px; }
+
+.input-control {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: 'Cairo';
+    font-size: 9pt;
+    background: #fafafa;
+    width: 100%;
+}
+
+/* ══ الخيارات (Pills) ══ */
+.options-wrapper { display: flex; gap: 6px; flex-wrap: wrap; }
+.opt-card {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 8pt;
+    font-weight: 600;
+    cursor: pointer;
+    background: white;
+}
+.opt-card input { margin: 0; width: 14px; height: 14px; accent-color: var(--secondary-color); }
+.opt-card:has(input:checked) { background: #f0fdf4; border-color: var(--secondary-color); color: var(--secondary-color); }
+
+/* ══ منطقة التوقيع ══ */
+.signature-section {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 15px;
+    align-items: stretch;
+}
+
+.declaration {
+    font-size: 8.5pt;
+    color: #064e3b;
+    background: #ecfdf5;
+    padding: 12px;
+    border: 1px dashed #10b981;
+    border-radius: 6px;
+    line-height: 1.7;
+}
+
+.sig-block {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+.sig-header { font-size: 8.5pt; font-weight: 800; text-align: center; padding: 4px; background: #f3f4f6; border-bottom: 1px solid var(--border-color); }
+.sig-canvas-area { position: relative; height: 60px; flex-grow: 1; cursor: crosshair; }
+#sigCanvas { width: 100%; height: 100%; }
+#sigImgPrint { display: none; width: 100%; height: 60px; object-fit: contain; }
+
+/* ══ الفوتر الثابت (الأسماء) ══ */
+.official-footer {
+    margin-top: auto; /* يدفع للأسفل */
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px 5px 20px;
+    z-index: 10;
+}
+.official-name { text-align: center; width: 45%; }
+.official-name .title { font-size: 11pt; font-weight: 900; color: var(--primary-color); }
+
+/* ══ الأزرار ══ */
+.action-bar { margin: 20px 0; display: flex; gap: 10px; }
+.btn {
+    padding: 10px 25px;
+    font-family: 'Cairo';
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+}
+.btn-print { background: #2563eb; }
+.btn-reset { background: #dc2626; }
+
+/* ══ إعدادات الطباعة الاحترافية ══ */
+@media print {
+    @page { size: A4; margin: 0 !important; }
+    body { background: white; padding: 0; margin: 0; }
+    .a4-container { box-shadow: none; width: 210mm; height: 297mm; margin: 0; }
+    .action-bar, .sig-tools { display: none !important; }
+    .input-control { background: transparent !important; border: 1px solid #eee !important; }
+    #sigCanvas { display: none !important; }
+    #sigImgPrint { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="action-bar">
+    <button class="btn btn-print" onclick="prepareAndPrint()">🖨️ طباعة الاستمارة (PDF)</button>
+    <button class="btn btn-reset" onclick="location.reload()">🔄 إعادة تعيين</button>
+</div>
+
+<div class="a4-container" id="printableArea">
+    <!-- الخلفيات -->
+    <img src="background3.jpg" class="bg-header" alt="Header">
+    <img src="background2.jpg" class="bg-footer" alt="Footer">
+
+    <div class="content">
+        <!-- الرأس -->
+        <div class="header-table">
+            <h1 class="main-title">استمارة متابعة إنهاء المناهج الدراسية</h1>
+            <p class="sub-title">الفصل الدراسي الثاني - العام الدراسي ١٤٤٧هـ</p>
+            <div class="divider"></div>
+        </div>
+
+        <div class="intro-text">
+            <strong>عزيزي المعلم:</strong> يرجى تعبئة البيانات التالية بدقة، حيث تُعد هذه الاستمارة مستنداً رسمياً لتوثيق إنهاء المقررات الدراسية وضمان جودة المخرجات التعليمية.
+        </div>
+
+        <!-- القسم الأول -->
+        <div class="section-head">أولاً: البيانات الأساسية للعملية التعليمية</div>
+        <div class="grid">
+            <div class="field-group">
+                <label class="field-label"><span class="req">*</span> اسم المعلم</label>
+                <input type="text" class="input-control" placeholder="الاسم الثلاثي">
+            </div>
+            <div class="field-group">
+                <label class="field-label"><span class="req">*</span> المادة الدراسية</label>
+                <input type="text" class="input-control" placeholder="اسم المادة">
+            </div>
+            <div class="field-group">
+                <label class="field-label"><span class="req">*</span> الصف الدراسي</label>
+                <div class="options-wrapper">
+                    <label class="opt-card"><input type="checkbox"> أول متوسط</label>
+                    <label class="opt-card"><input type="checkbox"> ثاني متوسط</label>
+                    <label class="opt-card"><input type="checkbox"> ثالث متوسط</label>
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-label"><span class="req">*</span> الفصول / الشعب</label>
+                <input type="text" class="input-control" placeholder="مثال: 101, 102, 105">
+            </div>
+        </div>
+
+        <!-- القسم الثاني -->
+        <div class="section-head">ثانياً: مؤشرات الإنجاز وخطة الإنهاء</div>
+        <div class="grid">
+            <div class="field-group">
+                <label class="field-label"><span class="req">*</span> حالة المنهج الحالية</label>
+                <div class="options-wrapper">
+                    <label class="opt-card"><input type="radio" name="status"> مكتمل</label>
+                    <label class="opt-card"><input type="radio" name="status"> قيد التنفيذ</label>
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-label">تاريخ الإنهاء المتوقع/الفعلي</label>
+                <input type="date" class="input-control">
+            </div>
+            <div class="field-group full-width">
+                <label class="field-label"><span class="req">*</span> نسبة الإنجاز الفعلية وفق الخطة الزمنية</label>
+                <div class="options-wrapper">
+                    <label class="opt-card"><input type="radio" name="perc"> 100%</label>
+                    <label class="opt-card"><input type="radio" name="perc"> 90% فأكثر</label>
+                    <label class="opt-card"><input type="radio" name="perc"> 80% فأكثر</label>
+                    <label class="opt-card"><input type="radio" name="perc"> أقل من 80%</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- القسم الثالث -->
+        <div class="section-head">ثالثاً: التحقق من الرصد والتقييم النهائي</div>
+        <div class="grid">
+            <div class="field-group">
+                <label class="field-label">رصد درجات الاختبارات الفترية</label>
+                <div class="options-wrapper">
+                    <label class="opt-card"><input type="radio" name="q1"> تم الرصد</label>
+                    <label class="opt-card"><input type="radio" name="q1"> لم يتم</label>
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-label">تقييم المهام الأدائية والمشاريع</label>
+                <div class="options-wrapper">
+                    <label class="opt-card"><input type="radio" name="q2"> مكتمل</label>
+                    <label class="opt-card"><input type="radio" name="q2"> غير مكتمل</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- القسم الرابع -->
+        <div class="section-head">رابعاً: ملاحظات وصعوبات التنفيذ</div>
+        <div class="field-group full-width">
+            <textarea class="input-control" rows="2" placeholder="اكتب أي تحديات واجهتك في إنهاء المنهج..."></textarea>
+        </div>
+
+        <!-- الإقرار والتوقيع -->
+        <div class="signature-section">
+            <div class="declaration">
+                أقر أنا المعلم الموقع أدناه، بصحة كافة البيانات الواردة في هذه الاستمارة، وأنني قمت بتغطية كافة المعايير والمهارات الأساسية للمادة العلمية، مع الالتزام بخطة المراجعة النهائية للطلاب.
+                <br>
+                <strong id="hijriDate">التاريخ: جارٍ التحميل...</strong>
+            </div>
+            <div class="sig-block">
+                <div class="sig-header">توقيع المعلم الإلكتروني</div>
+                <div class="sig-canvas-area">
+                    <canvas id="sigCanvas"></canvas>
+                    <img id="sigImgPrint" alt="Signature">
+                </div>
+                <div class="sig-tools" style="text-align: center; padding: 2px;">
+                    <button onclick="clearCanvas()" style="font-size: 7pt; color: red; border:none; background:none; cursor:pointer;">🗑️ مسح التوقيع</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الفوتر الأسماء -->
+        <div class="official-footer">
+            <div class="official-name">
+                <div class="title">وكيل الشؤون التعليمية</div>
+                <div style="font-size: 10pt; margin-top: 5px;">أ/ عبدالغفور العمري</div>
+            </div>
+            <div class="official-name">
+                <div class="title">مدير المدرسة</div>
+                <div style="font-size: 10pt; margin-top: 5px;">أ/ سلطان السحيمي</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// ضبط التاريخ الهجري
+function setDate() {
+    const today = new Date().toLocaleDateString('ar-SA-u-ca-islamic', {day:'numeric', month:'long', year:'numeric'});
+    document.getElementById('hijriDate').innerText = "تحريراً في: " + today + " هـ";
+}
+
+// برمجة التوقيع
+const canvas = document.getElementById('sigCanvas');
+const ctx = canvas.getContext('2d');
+let writing = false;
+
+function initCanvas() {
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
+    ctx.strokeStyle = "#0a2440";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+}
+
+canvas.addEventListener('mousedown', startPos);
+canvas.addEventListener('mouseup', endPos);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPos(e.touches[0]); });
+canvas.addEventListener('touchend', endPos);
+canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
+
+function startPos(e) { writing = true; draw(e); }
+function endPos() { writing = false; ctx.beginPath(); }
+function draw(e) {
+    if (!writing) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+
+function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+function prepareAndPrint() {
+    // تحويل الكانفاس لصورة للطباعة
+    const dataURL = canvas.toDataURL();
+    document.getElementById('sigImgPrint').src = dataURL;
+    window.print();
+}
+
+window.onload = () => {
+    setDate();
+    initCanvas();
+};
+</script>
+</body>
+</html>
