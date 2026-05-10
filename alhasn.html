@@ -288,7 +288,7 @@ let drawing=false,lastX=0,lastY=0;
 function setHijriDate(){
   try{
     const hDate=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
-    document.getElementById('hDate').innerText='التاريخ: '+hDate+' هـ';
+    document.getElementById('hDate').innerText='التاريخ: '+hDate+' ';
   }catch(e){
     document.getElementById('hDate').innerText='التاريخ: .................';
   }
