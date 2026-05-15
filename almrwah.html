@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title> استمارة متابعة المناهج ابتدائية المروة والروضة الثامنة والسبعون </title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page-w:210mm;
+  --page-h:297mm;
+  --top-band-h:9mm;
+  --bottom-band-h:12.5mm;
+  --page-pad-x:8mm;
+  --text:#13283f;
+  --green:#145a32;
+  --gold:#c8971a;
+  --line:#d8e0ea;
+  --muted:#eef3f8;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+html,body{margin:0;padding:0;font-family:'Cairo',sans-serif;background:#dde3ec;color:var(--text);}
+body{min-height:100vh;}
+.viewer{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px;}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;}
+.btn{padding:10px 18px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:800;border:none;border-radius:6px;cursor:pointer;color:#fff;}
+.btn-primary{background:#145a32;}
+.btn-secondary{background:#0a2440;}
+.btn-danger{background:#c2410c;}
+.sheet{
+  width:var(--page-w);
+  height:var(--page-h);
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.16);
+  display:grid;
+  grid-template-rows:var(--top-band-h) 1fr var(--bottom-band-h);
+  position:relative;
+}
+.band{width:100%;height:100%;display:block;object-fit:cover;object-position:center;}
+.main{min-height:0;display:flex;flex-direction:column;padding:0 var(--page-pad-x);}
+.logo-wrap{padding:3mm 0 1.2mm;text-align:center;flex-shrink:0;}
+.logo-wrap img{max-width:100%;max-height:15mm;height:auto;display:inline-block;}
+.title-block{text-align:center;flex-shrink:0;}
+.title-main{display:block;font-size:14pt;font-weight:900;line-height:1.15;color:#0a2440;}
+.title-sub{display:block;font-size:8.6pt;font-weight:800;line-height:1.2;color:var(--green);margin-top:0.5em;}
+.divider{height:1.5px;margin:3px 0 4px;background:linear-gradient(to left,transparent,var(--gold),var(--green),var(--gold),transparent);}
+.greeting{font-size:7.2pt;line-height:1.45;color:#334155;background:#fffbe8;padding:3.2px 8px;border-right:2.5px solid var(--gold);margin-bottom:4px;flex-shrink:0;}
+.form-area{display:flex;flex-direction:column;min-height:0;flex:1;justify-content:flex-start;}
+.sec{background:linear-gradient(135deg,#0a2440 0%,#1a4a7a 100%);color:#fff;font-size:8pt;font-weight:900;padding:3px 9px;border-radius:4px;margin:4px 0 3px;display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.sec::before{content:'';width:3px;height:11px;border-radius:2px;background:#f0c84a;}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;align-content:start;}
+.full{grid-column:1/-1;}
+.field{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.lbl{font-size:7.3pt;font-weight:800;color:#0f2740;line-height:1.25;}
+.req{color:#dc2626;}
+
+.fi{width:100%;min-height:32px;border:1px solid #ced8e3;border-radius:4px;background:#f8fafc;padding:5px 7px;font-family:'Cairo',sans-serif;font-size:9.5pt;font-weight:800;color:#0f172a;text-align:right;}
+textarea.fi{height:42px;resize:none;line-height:1.4;}
+.fi:focus{outline:none;border-color:var(--green);background:#fff;}
+
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;}
+.opts.four{grid-template-columns:repeat(4,minmax(0,1fr));}
+.opt{display:flex;align-items:center;justify-content:center;gap:4px;min-height:28px;padding:3px 6px;border:1px solid #d9e2ec;border-radius:4px;background:#fff;font-size:7pt;font-weight:800;line-height:1;white-space:nowrap;}
+.opt input{margin:0;accent-color:var(--green);}
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;}
+.decl-sig{display:grid;grid-template-columns:1.18fr .82fr;gap:9px;margin-top:4px;flex-shrink:0;}
+
+.decl-box{font-size:8.8pt;line-height:1.6;color:#14532d;background:#f0fdf4;border:1px dashed #86efac;border-radius:5px;padding:6px 9px;display:flex;flex-direction:column;justify-content:space-between;min-height:58px;}
+
+.date-line{font-weight:800;margin-top:4px;padding-top:3px;border-top:1px dashed #86efac;}
+.sig-box{border:1px solid #ced8e3;border-radius:5px;display:flex;flex-direction:column;min-height:58px;overflow:hidden;}
+.sig-lbl{font-size:6.9pt;font-weight:900;text-align:center;background:#f1f5f9;padding:2px 4px;}
+.sig-space{position:relative;flex:1;background:#fff;}
+#sigCanvas,#sigImgPrint{width:100%;height:100%;display:block;}
+#sigCanvas{touch-action:none;cursor:crosshair;}
+#sigImgPrint{display:none;object-fit:contain;}
+.meta-footer{margin-top:4px;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px 0 2px;border-top:1px solid var(--line);align-items:end;}
+.person{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0.5em;text-align:center;min-height:27px;}
+.person-title{font-size:8.4pt;font-weight:900;color:#0a2440;line-height:1.1;}
+.person-name{font-size:7.8pt;font-weight:700;color:#374151;line-height:1.15;}
+.print-note{display:none;}
+
+@media screen and (max-width:900px){
+  .viewer{padding:0 0 12px;gap:0;background:#f5f7fb;}
+  .actions{position:sticky;top:0;z-index:20;background:#fff;padding:10px;border-bottom:1px solid #e2e8f0;}
+  .sheet-wrap{width:100%;overflow:auto;padding:10px 0 0;}
+  .sheet{box-shadow:none;margin-inline:auto;}
+}
+
+@media print{
+  @page{size:A4 portrait;margin:0;}
+  html,body{
+    width:210mm!important;
+    height:297mm!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+    overflow:hidden!important;
+  }
+  body{display:block!important;}
+  .viewer,.sheet-wrap{display:block!important;padding:0!important;margin:0!important;}
+  .actions{display:none!important;}
+  .sheet{
+    width:210mm!important;
+    height:297mm!important;
+    margin:0!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+    position:fixed!important;
+    inset:0!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+  #sigCanvas{display:none!important;}
+  #sigImgPrint{display:block!important;}
+  .print-note{display:block;}
+}
+</style>
+</head>
+<body>
+<div class="viewer">
+  <div class="actions">
+    <button class="btn btn-primary" onclick="doPrint()">تنزيل PDF A4</button>
+    <button class="btn btn-danger" onclick="clearSig()">مسح التوقيع</button>
+  </div>
+
+  <div class="sheet-wrap">
+    <div class="sheet" id="sheet">
+      <img src="background4.jpg" class="band" alt="">
+
+      <div class="main">
+        <div class="logo-wrap">
+          <img src="logoMR.png" alt="شعار وزارة التعليم">
+        </div>
+
+        <div class="title-block">
+          <span class="title-main">استمارة متابعة إنهاء المناهج الدراسية  </span>
+<input type="text" class="title-sub" value=" العام الدراسي ١٤٤٧هـ - الفصل الدراسي الثاني  " style="border: none; border-bottom: 1px dashed var(--green); background: transparent; text-align: center; outline: none; width: 100%; font-family: inherit; margin-top: 5px; height: 35px; padding-bottom: 5px;" oninput="this.setAttribute('value', this.value)">          <div class="divider"></div>
+        </div>
+
+        <div class="greeting">
+          <strong>عزيزتي المعلمة:</strong>
+          نأمل التكرم بتعبئة البيانات التالية بدقة لتوثيق إنجازاتك في إنهاء المقررات الدراسية وفق الخطة الزمنية المعتمدة.
+        </div>
+
+        <div class="form-area">
+          <div class="fgrid">
+            <div class="sec full">أولاً: البيانات الأساسية</div>
+
+            <div class="field">
+              <label class="lbl"><span class="req">*</span> اسم المعلمة الثلاثي</label>
+              <input type="text" class="fi" placeholder="الاسم كاملاً">
+            </div>
+
+            <div class="field">
+              <label class="lbl"><span class="req">*</span> المادة الدراسية</label>
+              <input type="text" class="fi" placeholder="اسم المادة">
+            </div>
+
+            <!-- تم التعديل هنا: تحويل نوع الحقل من radio إلى checkbox لتعدد الاختيار -->
+            <div class="field">
+              <label class="lbl"><span class="req">* </span>المرحلة الدراسية</label>
+              <div class="opts">
+                <label class="opt"><input type="checkbox" name="stage" value="ابتدائية" onchange="updateGrades()"> الابتدائية</label>
+              </div>
+            </div>
+            
+            <div class="field">
+              <label class="lbl"><span class="req">* </span>الصفوف التي تدرسها</label>
+              <div class="opts" id="gradeBoxes">
+                <span style="font-size:7.5pt; color:#666; padding-top: 3px; grid-column: 1/-1; text-align: center;">-- اختر المرحلة لتظهر الصفوف --</span>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label class="lbl"><span class="req">*</span> الفصول (الشعب)</label>
+              <input type="text" class="fi" placeholder="مثال: أ، ب، ج">
+            </div>
+
+            <div class="sec full">ثانياً: حالة التنفيذ والإنجاز</div>
+
+            <div class="field full">
+              <label class="lbl"><span class="req">*</span> حالة الانتهاء من المنهج</label>
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <label class="opt" style="flex: 1 1 auto;"><input type="radio" name="st"> تم الانتهاء من المنهج كاملاً</label>
+                <label class="opt" style="flex: 1 1 auto;"><input type="radio" name="st"> جاري العمل على إنهاء المتبقي من المنهج</label>
+                <label class="opt" style="flex: 1 1 auto;"><input type="radio" name="st"> متأخرة عن الخطة الزمنية</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl">تاريخ الانتهاء المتوقع</label>
+              <input type="date" class="fi">
+            </div>
+
+            <div class="field full">
+              <label class="lbl"><span class="req">*</span> نسبة الإنجاز الفعلية</label>
+              <div class="opts four">
+                <label class="opt"><input type="radio" name="p"> 100%</label>
+                <label class="opt"><input type="radio" name="p"> 90% فأكثر</label>
+                <label class="opt"><input type="radio" name="p"> 80% فأكثر</label>
+                <label class="opt"><input type="radio" name="p"> أقل من 80%</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="sec">ثالثاً: المتابعة والتقييم النهائي</div>
+          <div class="qa-grid">
+            <div class="field">
+              <label class="lbl">رصد درجات الاختبارات الفترية؟</label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="q1"> نعم</label>
+                <label class="opt"><input type="radio" name="q1"> لا</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl">تقييم المهام الأدائية والمشاريع؟</label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="q2"> نعم</label>
+                <label class="opt"><input type="radio" name="q2"> لا</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl">تسليم سجلات المتابعة للإدارة؟</label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="q3"> نعم</label>
+                <label class="opt"><input type="radio" name="q3"> لا</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="lbl">تنفيذ خطة المراجعة النهائية؟</label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="q4"> نعم</label>
+                <label class="opt"><input type="radio" name="q4"> لا</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="sec">رابعاً: ملاحظات إضافية</div>
+          <div class="field">
+            <textarea class="fi" placeholder="أي ملاحظات أو معوقات واجهتكم..."></textarea>
+          </div>
+
+          <div class="decl-sig">
+            <div class="decl-box">
+              <div>
+                أقر أنا المعلمة المذكورة بياناتها أعلاه بصحة كافة البيانات المسجلة بخصوص إنهاء المناهج الدراسية المسندة إليّ، مع مراجعة المهارات الأساسية للطالبات ورصد الدرجات.
+              </div>
+              <div class="date-line" id="hDate">التاريخ:</div>
+            </div>
+
+            <div class="sig-box">
+              <div class="sig-lbl">توقيع المعلمة</div>
+              <div class="sig-space">
+                <canvas id="sigCanvas"></canvas>
+                <img id="sigImgPrint" alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="meta-footer">
+            <div class="person">
+              <span class="person-title">وكيلة المدرسة</span>
+              <span class="person-name"> نوضاء هيف الشهراني</span>
+            </div>
+            <div class="person">
+              <span class="person-title">مديرة المدرسة</span>
+              <span class="person-name">منيرة عبيد المعاوي</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img src="background5.jpg" class="band" alt="">
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script>
+const canvas=document.getElementById('sigCanvas');
+const ctx=canvas.getContext('2d');
+let drawing=false,lastX=0,lastY=0;
+
+function setHijriDate(){
+  try{
+    const hDate=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
+    document.getElementById('hDate').innerText='التاريخ: '+hDate+' ';
+  }catch(e){
+    document.getElementById('hDate').innerText='التاريخ: .................';
+  }
+}
+
+function resizeCanvas(){
+  const ratio=window.devicePixelRatio||1;
+  const rect=canvas.getBoundingClientRect();
+  const temp=document.createElement('canvas');
+  temp.width=canvas.width;
+  temp.height=canvas.height;
+  temp.getContext('2d').drawImage(canvas,0,0);
+  canvas.width=Math.max(1,Math.floor(rect.width*ratio));
+  canvas.height=Math.max(1,Math.floor(rect.height*ratio));
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.scale(ratio,ratio);
+  ctx.lineWidth=2;
+  ctx.lineCap='round';
+  ctx.strokeStyle='#0a2440';
+  if(temp.width&&temp.height){
+    ctx.drawImage(temp,0,0,rect.width,rect.height);
+  }
+}
+
+function pointFromEvent(e){
+  const rect=canvas.getBoundingClientRect();
+  const touch=e.touches?e.touches[0]:e;
+  return {x:touch.clientX-rect.left,y:touch.clientY-rect.top};
+}
+
+function startDraw(e){
+  e.preventDefault();
+  drawing=true;
+  const p=pointFromEvent(e);
+  lastX=p.x; lastY=p.y;
+}
+
+function moveDraw(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const p=pointFromEvent(e);
+  ctx.beginPath();
+  ctx.moveTo(lastX,lastY);
+  ctx.lineTo(p.x,p.y);
+  ctx.stroke();
+  lastX=p.x; lastY=p.y;
+}
+
+function endDraw(){ drawing=false; }
+
+function syncInputValuesForPdf() {
+  document.querySelectorAll('.fi').forEach(el => {
+    const clone = el.cloneNode(true);
+    if(el.parentNode) el.parentNode.replaceChild(clone, el);
+    
+    clone.addEventListener('input', function() {
+      if (this.tagName === 'TEXTAREA') {
+        this.textContent = this.value;
+      } else {
+        this.setAttribute('value', this.value);
+      }
+    });
+  });
+  
+  document.querySelectorAll('.opt input').forEach(el => {
+    const clone = el.cloneNode(true);
+    if(el.parentNode) el.parentNode.replaceChild(clone, el);
+    
+    clone.addEventListener('change', function() {
+      if (this.type === 'radio') {
+        document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => r.removeAttribute('checked'));
+      }
+      if (this.checked) {
+        this.setAttribute('checked', 'checked');
+      } else {
+        this.removeAttribute('checked');
+      }
+    });
+  });
+}
+
+canvas.addEventListener('mousedown',startDraw);
+canvas.addEventListener('mousemove',moveDraw);
+canvas.addEventListener('mouseup',endDraw);
+canvas.addEventListener('mouseleave',endDraw);
+canvas.addEventListener('touchstart',startDraw,{passive:false});
+canvas.addEventListener('touchmove',moveDraw,{passive:false});
+canvas.addEventListener('touchend',endDraw);
+window.addEventListener('resize',resizeCanvas);
+window.addEventListener('load',()=>{ 
+  setHijriDate(); 
+  resizeCanvas(); 
+  syncInputValuesForPdf(); 
+});
+
+function clearSig(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  document.getElementById('sigImgPrint').removeAttribute('src');
+}
+
+function syncSignatureImage(){
+  try{
+    const data=canvas.toDataURL('image/png');
+    document.getElementById('sigImgPrint').src=data;
+  }catch(e){}
+}
+
+async function generateA4Pdf(download=true){
+  syncSignatureImage();
+  const target=document.getElementById('sheet');
+  const scale=Math.max(2,window.devicePixelRatio||1);
+  const rendered=await html2canvas(target,{
+    scale,
+    useCORS:true,
+    backgroundColor:'#ffffff',
+    logging:false,
+    windowWidth:target.scrollWidth,
+    windowHeight:target.scrollHeight,
+    scrollX:0,
+    scrollY:0
+  });
+
+  const { jsPDF } = window.jspdf;
+  const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const width=210;
+  const height=297;
+  const imgData=rendered.toDataURL('image/jpeg',0.96);
+  pdf.addImage(imgData,'JPEG',0,0,width,height,undefined,'FAST');
+
+  if(download){
+    pdf.save('استمارة-متابعة-المناهج-A4.pdf');
+    return null;
+  }
+  return pdf.output('datauristring');
+}
+
+async function doPrint(){
+  try{
+    await generateA4Pdf(true);
+  }catch(error){
+    alert('تعذر توليد PDF، سيتم فتح طباعة المتصفح كبديل.');
+    browserPrint();
+  }
+}
+
+function browserPrint(){
+  syncSignatureImage();
+  setTimeout(()=>window.print(),120);
+}
+
+window.generateA4Pdf=generateA4Pdf;
+window.browserPrint=browserPrint;
+window.clearSig=clearSig;
+window.doPrint=doPrint;
+
+// ── نظام إظهار الصفوف (المتوسطة والثانوية) مع إمكانية التحديد المتعدد ──
+// ── نظام إظهار الصفوف للابتدائية (3 فصول في كل صف) ──
+const gradesData = {
+  'ابتدائية':['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس']
+};
+
+function updateGrades() {
+  const checkedStages = document.querySelectorAll('input[name="stage"]:checked');
+  const container = document.getElementById('gradeBoxes');
+  
+  if (checkedStages.length === 0) {
+    container.style.gridTemplateColumns = ''; // العودة للوضع الطبيعي
+    container.innerHTML = '<span style="font-size:7.5pt; color:#666; padding-top: 3px; grid-column: 1/-1; text-align: center;">-- اختر المرحلة لتظهر الصفوف --</span>';
+    return;
+  }
+  
+  container.innerHTML = ''; 
+  
+  // هذا السطر يجبر الفصول على الظهور 3 في كل صف
+  container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+  
+  checkedStages.forEach(stageInput => {
+    const stage = stageInput.value;
+    gradesData[stage].forEach(g => { 
+      const label = document.createElement('label');
+      label.className = 'opt';
+      
+      // أزلنا اسم المرحلة من جانب الصف لأنه لا يوجد سوى ابتدائي
+      const gradeName = `الصف ${g}`; 
+      
+      label.innerHTML = `<input type="checkbox" name="grade" value="${gradeName}"> ${gradeName}`;
+      
+      const newCheckbox = label.querySelector('input');
+      newCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          this.setAttribute('checked', 'checked');
+        } else {
+          this.removeAttribute('checked');
+        }
+      });
+      
+      container.appendChild(label);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
