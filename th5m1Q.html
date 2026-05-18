@@ -290,12 +290,8 @@ const ctx=canvas.getContext('2d');
 let drawing=false,lastX=0,lastY=0;
 
 function setHijriDate(){
-  try{
-    const hDate=new Intl.DateTimeFormat('ar-SA-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
-    document.getElementById('hDate').innerText='التاريخ: '+hDate+' ';
-  }catch(e){
-    document.getElementById('hDate').innerText='التاريخ: .................';
-  }
+  // تاريخ ثابت للإقرار بدلاً من التاريخ الآلي
+  document.getElementById('hDate').innerText='التاريخ: ٤ / ١٢ / ١٤٤٧ هـ';
 }
 
 function resizeCanvas(){
